@@ -1,0 +1,29 @@
+{
+    "Tracks": [
+        {
+            "Cardinal": "Bathurst",
+            "Aliases": [
+                "Mount Panorama",
+                "Mt Panorama",
+                "The Mountain",
+                "Wahluu"
+            ]
+        },
+        {
+            "Cardinal": "Daytona",
+            "Aliases": [
+                "Daytona International Speedway",
+                "World Center of Racing",
+                "Super Bowl"
+            ]
+        },
+        {
+            "Cardinal": "VIR",
+            "Aliases": [
+                "Virginia International Raceway",
+                "Virginia",
+                "American Nurburgring"
+            ]
+        }
+    ]
+}
