@@ -29,16 +29,19 @@ class Program
         string codeChallenge = GenerateCodeChallenge(codeVerifier);
 
         // setup local listener
+        int port = GetFreePort();
+        string redirectUri = AuthRedirectUri.Replace(":0", $":{port}");
         using var listener = new HttpListener();
-        listener.Prefixes.Add(AuthRedirectUri + "/");
+        listener.Prefixes.Add(redirectUri + "/");
         listener.Start();
+        Console.WriteLine($"Listening on {redirectUri}");
 
         // setup authorize url
         string state = Guid.NewGuid().ToString("N");
         string authorizeUrl =
             $"{AuthEndpoint}"
             + $"?client_id={ClientId}"
-            + $"&redirect_uri={AuthRedirectUri}"
+            + $"&redirect_uri={redirectUri}"
             + $"&response_type=code"
             + $"&code_challenge={codeChallenge}"
             + $"&code_challenge_method=S256"
@@ -172,6 +175,17 @@ class Program
     #endregion
 
     #region Infrastructure
+    private static int GetFreePort()
+    {
+        using var socket = new Socket(
+            AddressFamily.InterNetwork,
+            SocketType.Stream,
+            ProtocolType.Tcp
+        );
+        socket.Bind(new IPEndPoint(IPAddress.Loopback, 0));
+        return ((IPEndPoint)socket.LocalEndPoint!).Port;
+    }
+
     private static void OpenBrowser(string url)
     {
         try
