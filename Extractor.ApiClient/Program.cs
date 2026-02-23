@@ -24,17 +24,18 @@ class Program
     {
         Console.WriteLine("--- iRacing OAuth Console Test ---");
 
+        // setup local listener
+        var loopbackAddress = IPAddress.Parse("127.0.0.1");
+        var listener = new TcpListener(loopbackAddress, 0);
+        listener.Start();
+
+        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        string redirectUri = $"http://127.0.0.1:{port}/oauth/redirect";
+        Console.WriteLine($"Listening on {redirectUri}");
+
         // Prepare PKCE
         string codeVerifier = GenerateCodeVerifier();
         string codeChallenge = GenerateCodeChallenge(codeVerifier);
-
-        // setup local listener
-        int port = GetFreePort();
-        string redirectUri = AuthRedirectUri.Replace(":0", $":{port}");
-        using var listener = new HttpListener();
-        listener.Prefixes.Add(redirectUri + "/");
-        listener.Start();
-        Console.WriteLine($"Listening on {redirectUri}");
 
         // setup authorize url
         string state = Guid.NewGuid().ToString("N");
@@ -53,31 +54,24 @@ class Program
         OpenBrowser(authorizeUrl);
 
         // wait for redirect
-        var context = await listener.GetContextAsync();
-        var request = context.Request;
-        var response = context.Response;
+        var authResult = await WaitForCallbackAsync(listener, state);
+        listener.Stop();
 
-        string? code = request.QueryString.Get("code");
-        string? incomingState = request.QueryString.Get("state");
-
-        if (string.IsNullOrEmpty(code) || incomingState != state)
+        if (authResult.IsError)
         {
-            Console.WriteLine("Error: Invalid state or missing code");
-            await SendResponseAsync(response, "Error: Authenticaiton failed or invalid state");
+            Console.WriteLine($"Error: {authResult.ErrorMessage}");
             return;
         }
 
-        // send Success message to browser
-        await SendResponseAsync(
-            response,
-            "<html><body><h1>Authorization Successful</h1><p>You can now close the browser window</p></body></html>"
-        );
-        listener.Stop();
-        Console.WriteLine("Authorization code received");
+        Console.WriteLine($"Authorization code: {authResult.Code[..10]}...");
 
         // exchange code for tokens
         Console.WriteLine("Exchanging obtained code for tokens");
-        var tokenData = await ExchangeCodeForTokensAsync(code, codeVerifier, AuthRedirectUri);
+        var tokenData = await ExchangeCodeForTokensAsync(
+            authResult.Code,
+            codeVerifier,
+            redirectUri
+        );
 
         if (tokenData == null)
         {
@@ -108,7 +102,81 @@ class Program
     }
 
     #region Helpers
-    private static async Task<JsonDocument> ExchangeCodeForTokensAsync(
+    private class AuthResult
+    {
+        public string Code { get; set; } = string.Empty;
+        public bool IsError { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
+    }
+
+    private static async Task<AuthResult> WaitForCallbackAsync(
+        TcpListener listener,
+        string expectedState
+    )
+    {
+        using var client = await listener.AcceptTcpClientAsync();
+        using var stream = client.GetStream();
+        using var reader = new StreamReader(stream, Encoding.ASCII);
+        using var writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+
+        // read the request line
+        if (await reader.ReadLineAsync() is not string requestLine)
+            return new AuthResult { IsError = true, ErrorMessage = "Could not read request" };
+
+        // consume headers, but we don't care about them
+        while (!string.IsNullOrEmpty(await reader.ReadLineAsync())) { }
+
+        if (string.IsNullOrEmpty(requestLine))
+            return new AuthResult { IsError = true, ErrorMessage = "Empty request" };
+
+        // parse query string
+        string[] parts = requestLine.Split(' ');
+        if (parts.Length < 2)
+            return new AuthResult { IsError = true, ErrorMessage = "Ivalid request" };
+
+        string url = parts[1];
+        if (!url.Contains("?"))
+            return new AuthResult { IsError = true, ErrorMessage = "No query parameters" };
+
+        string queryString = url.Substring(url.IndexOf('?') + 1);
+        string? code = null;
+        string? incomingState = null;
+
+        foreach (var param in queryString.Split('&'))
+        {
+            var pair = param.Split('=');
+            if (pair.Length == 2)
+            {
+                if (pair[0] == "code")
+                    code = pair[1];
+                if (pair[0] == "state")
+                    incomingState = pair[1];
+            }
+        }
+
+        // send success response to browser
+        string responseHtml =
+            "<html>"
+            + "<body style='font-family:sans-serif;'>"
+            + "<h1>Authorization Successful</h1>"
+            + "<p>You can close the browser window</p>"
+            + "</body>"
+            + "</html>";
+
+        await writer.WriteAsync("HTTP/1.1 200 OK\r\n");
+        await writer.WriteAsync("Content-Type: text/html\r\n");
+        await writer.WriteAsync("Connection: close\r\n\r\n");
+        await writer.WriteAsync(responseHtml);
+
+        if (incomingState != expectedState)
+            return new AuthResult { IsError = true, ErrorMessage = "State Mismatch" };
+        if (string.IsNullOrEmpty(code))
+            return new AuthResult { IsError = true, ErrorMessage = "Code not found" };
+
+        return new AuthResult { Code = code, IsError = false };
+    }
+
+    private static async Task<JsonDocument?> ExchangeCodeForTokensAsync(
         string code,
         string codeVerifier,
         string redirectUri
