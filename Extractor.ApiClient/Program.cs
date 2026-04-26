@@ -20,6 +20,9 @@ class Program
 
     private const string BaseDataApiUrl = "https://members-ng.iracing.com/data";
 
+    private static readonly JsonSerializerOptions DefaultSerializerOptions = new JsonSerializerOptions()
+        { WriteIndented = true };
+
     static async Task Main(string[] args)
     {
         Console.WriteLine("--- iRacing OAuth Console Test ---");
@@ -79,34 +82,43 @@ class Program
             return;
         }
 
-        if (tokenData.RootElement.GetProperty("access_token").GetString() is not string accessToken)
+        if (tokenData.RootElement.GetProperty("access_token").GetString() is not { } accessToken)
         {
             Console.WriteLine("Failed to read access token");
             return;
         }
-        if (
-            tokenData.RootElement.GetProperty("refresh_token").GetString()
-            is not string refreshToken
-        )
+        if (tokenData.RootElement.GetProperty("refresh_token").GetString() is not { } refreshToken)
         {
             Console.WriteLine(
                 "Failed to read refresh token. Proceeding, but you won't get a refreshed access token if it times out"
             );
         }
 
-        Console.WriteLine($"\nAcessToken: {accessToken[..10]}... (truncated)");
+        Console.WriteLine($"\nAccessToken: {accessToken[..10]}... (truncated)");
 
         // try calling the data api
-        Console.WriteLine("/nCalling the /data API (/data/doc)...");
-        await CallDataApiAsync(accessToken, BaseDataApiUrl + "/doc");
+        Console.WriteLine("/nCalling the /data API (/data/track/get)...");
+        var retJson = await CallDataApiAsync(accessToken, BaseDataApiUrl + "/track/get");
+        try
+        {
+            var cwd = Environment.CurrentDirectory;
+            await using StreamWriter writer = new(
+                new FileStream(Path.Combine(cwd, "tracks-output.json"), FileMode.Create, FileAccess.ReadWrite), 
+                Encoding.UTF8);
+            await writer.WriteAsync(retJson);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     #region Helpers
     private class AuthResult
     {
-        public string Code { get; set; } = string.Empty;
-        public bool IsError { get; set; }
-        public string ErrorMessage { get; set; } = string.Empty;
+        public string Code { get; init; } = string.Empty;
+        public bool IsError { get; init; }
+        public string ErrorMessage { get; init; } = string.Empty;
     }
 
     private static async Task<AuthResult> WaitForCallbackAsync(
@@ -185,18 +197,17 @@ class Program
         using var client = new HttpClient();
 
         var content = new FormUrlEncodedContent(
-            new[]
-            {
+            [
                 new KeyValuePair<string, string>("grant_type", "authorization_code"),
                 new KeyValuePair<string, string>("client_id", ClientId),
                 new KeyValuePair<string, string>("code", code),
                 new KeyValuePair<string, string>("redirect_uri", redirectUri),
-                new KeyValuePair<string, string>("code_verifier", codeVerifier),
-            }
+                new KeyValuePair<string, string>("code_verifier", codeVerifier)
+            ]
         );
 
         var response = await client.PostAsync(TokenEndpoint, content);
-        string json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
@@ -207,7 +218,7 @@ class Program
         return JsonDocument.Parse(json);
     }
 
-    private static async Task CallDataApiAsync(string accessToken, string url)
+    private static async Task<string> CallDataApiAsync(string accessToken, string url)
     {
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
@@ -216,28 +227,27 @@ class Program
         );
 
         var response = await client.GetAsync(url);
-        string json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
             Console.WriteLine($"API call failed: {response.StatusCode}");
             Console.WriteLine(json);
-            return;
+            return string.Empty;
         }
 
         Console.WriteLine("API call successful");
         try
         {
             var doc = JsonDocument.Parse(json);
-            string pretty = JsonSerializer.Serialize(
-                doc,
-                new JsonSerializerOptions() { WriteIndented = true }
-            );
+            var pretty = JsonSerializer.Serialize(doc, DefaultSerializerOptions);
             Console.WriteLine(pretty.Length > 1000 ? pretty[..1000] + "/n..." : pretty);
+            return pretty;
         }
         catch
         {
             Console.WriteLine(json);
+            return json;
         }
     }
     #endregion
@@ -295,9 +305,9 @@ class Program
         string responseString
     )
     {
-        byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+        var buffer = Encoding.UTF8.GetBytes(responseString);
         response.ContentLength64 = buffer.Length;
-        using var output = response.OutputStream;
+        await using var output = response.OutputStream;
         await output.WriteAsync(buffer, 0, buffer.Length);
     }
 

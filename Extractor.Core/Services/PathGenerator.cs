@@ -4,24 +4,25 @@ using Microsoft.Extensions.Options;
 
 namespace Extractor.Core.Services;
 
-public class DefaultPathGenerator : IPathGenerator
+public class PathGenerator(IOptionsMonitor<CoreConfig> configMonitor) : IPathGenerator
 {
-    private readonly IOptionsMonitor<CoreConfig> _options;
-
-    public DefaultPathGenerator(IOptionsMonitor<CoreConfig> options)
+    public string GenerateRelativePath(PathTemplateContext ctx)
     {
-        _options = options;
-    }
-
-    public string GeneratePath(PathTemplateContext ctx)
-    {
-        var template = _options.CurrentValue.PathTemplate;
+        var template = configMonitor.CurrentValue.PathTemplate;
 
         return template
             .Replace($"{Enum.GetName(PathElement.Track)}", ctx.Track)
             .Replace($"{Enum.GetName(PathElement.Season)}", ctx.Season)
-            .Replace($"{Enum.GetName(PathElement.Season)}", ctx.SeasonAndWeek)
-            .Replace($"{Enum.GetName(PathElement.Season)}", ctx.SetupShop);
+            .Replace($"{Enum.GetName(PathElement.SeasonAndWeek)}", ctx.SeasonAndWeek)
+            .Replace($"{Enum.GetName(PathElement.SetupShop)}", ctx.SetupShop);
+    }
+
+    public string GenerateFullPath(PathTemplateContext ctx)
+    {
+        if (string.IsNullOrEmpty(configMonitor.CurrentValue.SetupsBasePath))
+            return string.Empty;
+
+        return Path.Combine(configMonitor.CurrentValue.SetupsBasePath, GenerateRelativePath(ctx));
     }
 
     public string UpdateTemplateFromEnums(IEnumerable<PathElement> elements)

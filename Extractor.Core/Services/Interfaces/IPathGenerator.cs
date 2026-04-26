@@ -4,6 +4,7 @@ namespace Extractor.Core.Services.Interfaces;
 
 public interface IPathGenerator
 {
-    string GeneratePath(PathTemplateContext ctx);
+    string GenerateRelativePath(PathTemplateContext ctx);
+    string GenerateFullPath(PathTemplateContext ctx);
     string UpdateTemplateFromEnums(IEnumerable<PathElement> elements);
 }
