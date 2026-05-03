@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Extractor.Gui.ViewModels"
+        xmlns:views="using:Extractor.Gui.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+        Width="800" Height="600"
+        x:Class="Extractor.Gui.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Extractor.Gui">
+    
+    <Window.DataTemplates>
+        <DataTemplate DataType="vm:HomeViewModel">
+            <views:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:SettingsViewModel">
+            <views:SettingsView/>
+        </DataTemplate>
+        <DataTemplate DataType="vm:TracksViewModel">
+            <views:TracksView/>
+        </DataTemplate>
+    </Window.DataTemplates>
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Grid ColumnDefinitions="150, *">
+        <StackPanel Grid.Column="0"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Stretch"
+                    Spacing="8"
+                    Margin="12,16">
+            <Button Content="Home"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding GoHomeCommand}"/>
+            <Button Content="Settings"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding GoSettingsCommand}"/>
+            <Button Content="Tracks Editor"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding GoTracksCommand}"/>
+        </StackPanel>
+        
+        <ContentControl Grid.Column="1"
+                        Margin="0,16,16,16"
+                        Content="{Binding CurrentPage}"/>
+    </Grid>
+
+    <!-- <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
+
+</Window>

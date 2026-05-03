@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Extractor.Gui.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SettingsViewModel"
+             x:Class="Extractor.Gui.Views.SettingsView"
+             Loaded="OnLoaded">
+    <DockPanel LastChildFill="False">
+        <StackPanel DockPanel.Dock="Top" 
+                    Orientation="Vertical"
+                    Spacing="16">
+            <TextBlock Text="Main Settings"/>
+            <StackPanel Orientation="Vertical"
+                        Spacing="6">
+                <TextBlock Text="Setups Path"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Grid.Column="0" 
+                             Text="{Binding ConfigDto.SetupsBasePath}"
+                             Margin="0,0,8,0"/>
+                    <Button Grid.Column="1"
+                            Content="Select"
+                            Command="{Binding BrowseSetupsFolderCommand}"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Orientation="Vertical"
+                        Spacing="6">
+                <TextBlock Text="Target Path Template"/>
+                <TextBox Text="{Binding ConfigDto.PathTemplate}"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical"
+                        Spacing="6">
+                <TextBlock Text="Minimum Confidence Score for Matches"/>
+                <NumericUpDown Value="{Binding ConfigDto.MinConfidenceScore}"
+                               Minimum="50" Maximum="100"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="8">
+            <Button Content="Reload"
+                    Command="{Binding ReloadCommand}"/>
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}"/>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,923 @@
+{
+  "Tracks": [
+    {
+      "Cardinal": "[Legacy] Charlotte Motor Speedway - 2008",
+      "Aliases": [
+        "[Legacy] Charlotte Motor Speedway - 2008"
+      ]
+    },
+    {
+      "Cardinal": "[Legacy] Kentucky Speedway - 2011",
+      "Aliases": [
+        "[Legacy] Kentucky Speedway - 2011"
+      ]
+    },
+    {
+      "Cardinal": "[Legacy] Michigan International Speedway - 2009",
+      "Aliases": [
+        "[Legacy] Michigan International Speedway - 2009"
+      ]
+    },
+    {
+      "Cardinal": "[Legacy] Phoenix Raceway - 2008",
+      "Aliases": [
+        "[Legacy] Phoenix Raceway - 2008"
+      ]
+    },
+    {
+      "Cardinal": "[Legacy] Pocono Raceway - 2009",
+      "Aliases": [
+        "[Legacy] Pocono Raceway - 2009"
+      ]
+    },
+    {
+      "Cardinal": "[Legacy] Silverstone Circuit - 2008",
+      "Aliases": [
+        "[Legacy] Silverstone Circuit - 2008"
+      ]
+    },
+    {
+      "Cardinal": "[Legacy] Texas Motor Speedway - 2009",
+      "Aliases": [
+        "[Legacy] Texas Motor Speedway - 2009"
+      ]
+    },
+    {
+      "Cardinal": "Adelaide",
+      "Aliases": [
+        "Adelaide Street Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Algarve",
+      "Aliases": [
+        "Algarve International Circuit",
+        "Portimao"
+      ]
+    },
+    {
+      "Cardinal": "Auto Club Speedway",
+      "Aliases": [
+        "Auto Club Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Hermanos Rodriguez",
+      "Aliases": [
+        "Autódromo Hermanos Rodríguez",
+        "Hermanos Rodríguez",
+        "Mexico City"
+      ]
+    },
+    {
+      "Cardinal": "Mugello",
+      "Aliases": [
+        "Autodromo Internazionale del Mugello"
+      ]
+    },
+    {
+      "Cardinal": "Imola",
+      "Aliases": [
+        "Autodromo Internazionale Enzo e Dino Ferrari"
+      ]
+    },
+    {
+      "Cardinal": "Interlagos",
+      "Aliases": [
+        "Autódromo José Carlos Pace",
+        "Sao Paulo"
+      ]
+    },
+    {
+      "Cardinal": "Monza",
+      "Aliases": [
+        "Autodromo Nazionale Monza"
+      ]
+    },
+    {
+      "Cardinal": "Barber Motorsports Park",
+      "Aliases": [
+        "Barber Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "Bark River International Raceway",
+      "Aliases": [
+        "Bark River International Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Brands Hatch",
+      "Aliases": [
+        "Brands Hatch Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Bristol",
+      "Aliases": [
+        "Bristol Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Cadwell Park",
+      "Aliases": [
+        "Cadwell Park Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Mosport",
+      "Aliases": [
+        "Canadian Tire Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "Cedar Lake Speedway",
+      "Aliases": [
+        "Cedar Lake Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Centripetal Circuit",
+      "Aliases": [
+        "Centripetal Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Charlotte",
+      "Aliases": [
+        "Charlotte Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Chicago Street Course",
+      "Aliases": [
+        "Chicago Street Course"
+      ]
+    },
+    {
+      "Cardinal": "Chicagoland Speedway",
+      "Aliases": [
+        "Chicagoland Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Chili Bowl",
+      "Aliases": [
+        "Chili Bowl"
+      ]
+    },
+    {
+      "Cardinal": "Barcelona",
+      "Aliases": [
+        "Circuit de Barcelona Catalunya",
+        "Catalunya"
+      ]
+    },
+    {
+      "Cardinal": "Lédenon",
+      "Aliases": [
+        "Circuit de Lédenon"
+      ]
+    },
+    {
+      "Cardinal": "Magny-Cours",
+      "Aliases": [
+        "Circuit de Nevers Magny-Cours"
+      ]
+    },
+    {
+      "Cardinal": "Spa",
+      "Aliases": [
+        "Circuit de Spa-Francorchamps"
+      ]
+    },
+    {
+      "Cardinal": "Le Mans",
+      "Aliases": [
+        "Circuit des 24 Heures du Mans",
+        "Circuit de la Sarthe"
+      ]
+    },
+    {
+      "Cardinal": "Montreal",
+      "Aliases": [
+        "Circuit Gilles Villeneuve"
+      ]
+    },
+    {
+      "Cardinal": "COTA",
+      "Aliases": [
+        "Circuit of the Americas",
+        "Austin"
+      ]
+    },
+    {
+      "Cardinal": "Zandvoort",
+      "Aliases": [
+        "Circuit Zandvoort"
+      ]
+    },
+    {
+      "Cardinal": "Zolder",
+      "Aliases": [
+        "Circuit Zolder"
+      ]
+    },
+    {
+      "Cardinal": "Jerez",
+      "Aliases": [
+        "Circuito de Jerez - Ángel Nieto"
+      ]
+    },
+    {
+      "Cardinal": "Navarra",
+      "Aliases": [
+        "Circuito de Navarra"
+      ]
+    },
+    {
+      "Cardinal": "Concord Speedway",
+      "Aliases": [
+        "Concord Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Crandon",
+      "Aliases": [
+        "Crandon International Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Darlington Raceway",
+      "Aliases": [
+        "Darlington Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Daytona",
+      "Aliases": [
+        "Daytona International Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Daytona Rallycross",
+      "Aliases": [
+        "Daytona Rallycross and Dirt Road"
+      ]
+    },
+    {
+      "Cardinal": "Belle Isle",
+      "Aliases": [
+        "Detroit Grand Prix at Belle Isle"
+      ]
+    },
+    {
+      "Cardinal": "Donington",
+      "Aliases": [
+        "Donington Park Racing Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Dover Motor Speedway",
+      "Aliases": [
+        "Dover Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "EchoPark Speedway (Atlanta)",
+      "Aliases": [
+        "EchoPark Speedway (Atlanta)"
+      ]
+    },
+    {
+      "Cardinal": "Eldora Speedway",
+      "Aliases": [
+        "Eldora Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Fairbury Speedway",
+      "Aliases": [
+        "Fairbury Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Federated Auto Parts Raceway at I-55",
+      "Aliases": [
+        "Federated Auto Parts Raceway at I-55"
+      ]
+    },
+    {
+      "Cardinal": "Firebird Motorsports Park",
+      "Aliases": [
+        "Firebird Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "Five Flags Speedway",
+      "Aliases": [
+        "Five Flags Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Fuji",
+      "Aliases": [
+        "Fuji International Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Hickory Motor Speedway",
+      "Aliases": [
+        "Hickory Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Hockenheimring",
+      "Aliases": [
+        "Hockenheimring Baden-Württemberg",
+        "Hockenheim"
+      ]
+    },
+    {
+      "Cardinal": "Homestead Miami Speedway",
+      "Aliases": [
+        "Homestead Miami Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Hungaroring",
+      "Aliases": [
+        "Hungaroring"
+      ]
+    },
+    {
+      "Cardinal": "Huset's Speedway",
+      "Aliases": [
+        "Huset's Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Indy",
+      "Aliases": [
+        "Indianapolis Motor Speedway",
+        "Indianapolis"
+      ]
+    },
+    {
+      "Cardinal": "Iowa Speedway",
+      "Aliases": [
+        "Iowa Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Iowa Speedway - Oval - 2011",
+      "Aliases": [
+        "Iowa Speedway - Oval - 2011"
+      ]
+    },
+    {
+      "Cardinal": "iRacing Superspeedway",
+      "Aliases": [
+        "iRacing Superspeedway"
+      ]
+    },
+    {
+      "Cardinal": "Irwindale Speedway",
+      "Aliases": [
+        "Irwindale Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Kansas Speedway",
+      "Aliases": [
+        "Kansas Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Kentucky Speedway",
+      "Aliases": [
+        "Kentucky Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Kevin Harvick's Kern Raceway",
+      "Aliases": [
+        "Kevin Harvick's Kern Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Knockhill",
+      "Aliases": [
+        "Knockhill Racing Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Knoxville Raceway",
+      "Aliases": [
+        "Knoxville Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Kokomo Speedway",
+      "Aliases": [
+        "Kokomo Speedway"
+      ]
+    },
+    {
+      "Cardinal": "LA Coliseum Raceway",
+      "Aliases": [
+        "LA Coliseum Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Langley Speedway",
+      "Aliases": [
+        "Langley Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Lanier National Speedway",
+      "Aliases": [
+        "Lanier National Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Hell",
+      "Aliases": [
+        "Lånkebanen (Hell RX)"
+      ]
+    },
+    {
+      "Cardinal": "Las Vegas Motor Speedway",
+      "Aliases": [
+        "Las Vegas Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Lernerville Speedway",
+      "Aliases": [
+        "Lernerville Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Limaland Motorsports Park",
+      "Aliases": [
+        "Limaland Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "Lime Rock",
+      "Aliases": [
+        "Lime Rock Park"
+      ]
+    },
+    {
+      "Cardinal": "Lincoln Speedway",
+      "Aliases": [
+        "Lincoln Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Long Beach",
+      "Aliases": [
+        "Long Beach Street Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Lucas Oil Indianapolis Raceway Park",
+      "Aliases": [
+        "Lucas Oil Indianapolis Raceway Park"
+      ]
+    },
+    {
+      "Cardinal": "Lucas Oil Speedway",
+      "Aliases": [
+        "Lucas Oil Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Martinsville Speedway",
+      "Aliases": [
+        "Martinsville Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Miami",
+      "Aliases": [
+        "Miami International Autodrome"
+      ]
+    },
+    {
+      "Cardinal": "Michigan International Speedway",
+      "Aliases": [
+        "Michigan International Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Mid-Ohio",
+      "Aliases": [
+        "Mid-Ohio Sports Car Course"
+      ]
+    },
+    {
+      "Cardinal": "Millbridge Speedway",
+      "Aliases": [
+        "Millbridge Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Misano",
+      "Aliases": [
+        "Misano World Circuit Marco Simoncelli"
+      ]
+    },
+    {
+      "Cardinal": "Motegi",
+      "Aliases": [
+        "Mobility Resort Motegi"
+      ]
+    },
+    {
+      "Cardinal": "Aragón",
+      "Aliases": [
+        "MotorLand Aragón"
+      ]
+    },
+    {
+      "Cardinal": "Oschersleben",
+      "Aliases": [
+        "Motorsport Arena Oschersleben"
+      ]
+    },
+    {
+      "Cardinal": "Bathurst",
+      "Aliases": [
+        "Mount Panorama Circuit",
+        "Mount Panorama"
+      ]
+    },
+    {
+      "Cardinal": "Mount Washington",
+      "Aliases": [
+        "Mount Washington Hillclimb"
+      ]
+    },
+    {
+      "Cardinal": "Myrtle Beach Speedway",
+      "Aliases": [
+        "Myrtle Beach Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Nashville Fairgrounds Speedway",
+      "Aliases": [
+        "Nashville Fairgrounds Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Nashville Superspeedway",
+      "Aliases": [
+        "Nashville Superspeedway"
+      ]
+    },
+    {
+      "Cardinal": "New Hampshire Motor Speedway",
+      "Aliases": [
+        "New Hampshire Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "New Jersey Motorsports Park",
+      "Aliases": [
+        "New Jersey Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "New Smyrna Speedway",
+      "Aliases": [
+        "New Smyrna Speedway"
+      ]
+    },
+    {
+      "Cardinal": "North Wilkesboro Speedway",
+      "Aliases": [
+        "North Wilkesboro Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Nurburgring Combined",
+      "Aliases": [
+        "Nürburgring Combined"
+      ]
+    },
+    {
+      "Cardinal": "Nurburgring GP",
+      "Aliases": [
+        "Nürburgring Grand-Prix-Strecke"
+      ]
+    },
+    {
+      "Cardinal": "Nordschleife",
+      "Aliases": [
+        "Nürburgring Nordschleife"
+      ]
+    },
+    {
+      "Cardinal": "Okayama",
+      "Aliases": [
+        "Okayama International Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Oran Park",
+      "Aliases": [
+        "Oran Park Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Oswego Speedway",
+      "Aliases": [
+        "Oswego Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Oulton Park",
+      "Aliases": [
+        "Oulton Park Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Oxford Plains Speedway",
+      "Aliases": [
+        "Oxford Plains Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Phillip Island",
+      "Aliases": [
+        "Phillip Island Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Phoenix Raceway",
+      "Aliases": [
+        "Phoenix Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Pocono Raceway",
+      "Aliases": [
+        "Pocono Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Port Royal Speedway",
+      "Aliases": [
+        "Port Royal Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Portland International Raceway",
+      "Aliases": [
+        "Portland International Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Red Bull Ring",
+      "Aliases": [
+        "Red Bull Ring",
+        "A1 Ring",
+        "Österreichring"
+      ]
+    },
+    {
+      "Cardinal": "Richmond Raceway",
+      "Aliases": [
+        "Richmond Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Road America",
+      "Aliases": [
+        "Road America"
+      ]
+    },
+    {
+      "Cardinal": "Road Atlanta",
+      "Aliases": [
+        "Road Atlanta"
+      ]
+    },
+    {
+      "Cardinal": "Rockingham Speedway",
+      "Aliases": [
+        "Rockingham Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Rudskogen",
+      "Aliases": [
+        "Rudskogen Motorsenter"
+      ]
+    },
+    {
+      "Cardinal": "Sachsenring",
+      "Aliases": [
+        "Sachsenring"
+      ]
+    },
+    {
+      "Cardinal": "Sandown International Motor Raceway",
+      "Aliases": [
+        "Sandown International Motor Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Sebring",
+      "Aliases": [
+        "Sebring International Raceway"
+      ]
+    },
+    {
+      "Cardinal": "The Bend",
+      "Aliases": [
+        "Shell V-Power Motorsport Park at The Bend"
+      ]
+    },
+    {
+      "Cardinal": "Silverstone",
+      "Aliases": [
+        "Silverstone Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Slinger Speedway",
+      "Aliases": [
+        "Slinger Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Snetterton",
+      "Aliases": [
+        "Snetterton Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Sonoma Raceway",
+      "Aliases": [
+        "Sonoma Raceway"
+      ]
+    },
+    {
+      "Cardinal": "South Boston Speedway",
+      "Aliases": [
+        "South Boston Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Southern National Motorsports Park",
+      "Aliases": [
+        "Southern National Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "St. Pete",
+      "Aliases": [
+        "St. Petersburg Grand Prix"
+      ]
+    },
+    {
+      "Cardinal": "Stafford Motor Speedway",
+      "Aliases": [
+        "Stafford Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Summit Point",
+      "Aliases": [
+        "Summit Point Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Suzuka",
+      "Aliases": [
+        "Suzuka International Racing Course"
+      ]
+    },
+    {
+      "Cardinal": "Talladega Superspeedway",
+      "Aliases": [
+        "Talladega Superspeedway"
+      ]
+    },
+    {
+      "Cardinal": "Texas Motor Speedway",
+      "Aliases": [
+        "Texas Motor Speedway"
+      ]
+    },
+    {
+      "Cardinal": "The Bullring",
+      "Aliases": [
+        "The Bullring"
+      ]
+    },
+    {
+      "Cardinal": "The Dirt Track at Charlotte",
+      "Aliases": [
+        "The Dirt Track at Charlotte"
+      ]
+    },
+    {
+      "Cardinal": "The Milwaukee Mile",
+      "Aliases": [
+        "The Milwaukee Mile"
+      ]
+    },
+    {
+      "Cardinal": "Thompson Speedway Motorsports Park",
+      "Aliases": [
+        "Thompson Speedway Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "Thruxton",
+      "Aliases": [
+        "Thruxton Circuit"
+      ]
+    },
+    {
+      "Cardinal": "Tsukuba",
+      "Aliases": [
+        "Tsukuba Circuit"
+      ]
+    },
+    {
+      "Cardinal": "USA International Speedway",
+      "Aliases": [
+        "USA International Speedway"
+      ]
+    },
+    {
+      "Cardinal": "VIR",
+      "Aliases": [
+        "Virginia International Raceway",
+        "Virginia"
+      ]
+    },
+    {
+      "Cardinal": "Volusia Speedway Park",
+      "Aliases": [
+        "Volusia Speedway Park"
+      ]
+    },
+    {
+      "Cardinal": "Watkins Glen",
+      "Aliases": [
+        "Watkins Glen International"
+      ]
+    },
+    {
+      "Cardinal": "Laguna Seca",
+      "Aliases": [
+        "WeatherTech Raceway at Laguna Seca"
+      ]
+    },
+    {
+      "Cardinal": "Weedsport Speedway",
+      "Aliases": [
+        "Weedsport Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Wild West Motorsports Park",
+      "Aliases": [
+        "Wild West Motorsports Park"
+      ]
+    },
+    {
+      "Cardinal": "Williams Grove Speedway",
+      "Aliases": [
+        "Williams Grove Speedway"
+      ]
+    },
+    {
+      "Cardinal": "Willow Springs",
+      "Aliases": [
+        "Willow Springs International Raceway"
+      ]
+    },
+    {
+      "Cardinal": "Winton",
+      "Aliases": [
+        "Winton Motor Raceway"
+      ]
+    },
+    {
+      "Cardinal": "World Wide Technology Raceway (Gateway)",
+      "Aliases": [
+        "World Wide Technology Raceway (Gateway)"
+      ]
+    }
+  ]
+}

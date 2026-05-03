@@ -11,27 +11,29 @@ public class SetupShopMatcher(IOptionsMonitor<SetupShopsData> setupShopsMonitor,
 {
     public SetupShopMatchResult TryMatchComponentFromPath(string path)
     {
-        var setupShopNames = setupShopsMonitor.CurrentValue.Names;
+        var setupShops = setupShopsMonitor.CurrentValue.Shops;
         var minConfidenceScore = configMonitor.CurrentValue.MinConfidenceScore;
 
-        if (setupShopNames.Count == 0)
+        if (setupShops.Count == 0)
             return SetupShopMatchResult.NotFound();
         
         var bestMatch = SetupShopMatchResult.NotFound();
 
-        foreach (var setupShopName in setupShopNames)
+        foreach (var setupShop in setupShops)
         {
-            var sanitizedShopName = setupShopName.SanitizeSpecialChars();
             var segments = path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
             foreach (var segment in segments)
             {
                 var sanitizedSegment = segment.SanitizeSpecialChars();
-                
-                if (sanitizedSegment.Equals(setupShopName, StringComparison.OrdinalIgnoreCase)      )
-                    MatchScoreHelper.CheckScore(ref bestMatch, minConfidenceScore, setupShopName, segment, 100);
+                var cardinalScore = Fuzz.PartialRatio(setupShop.Cardinal.SanitizeSpecialChars(), sanitizedSegment);
+                MatchScoreHelper.CheckScore(ref bestMatch, minConfidenceScore, setupShop.Cardinal, segment,
+                    cardinalScore);
 
-                var fuzzySegmentScore = Fuzz.PartialRatio(sanitizedShopName, sanitizedSegment);
-                MatchScoreHelper.CheckScore(ref bestMatch, minConfidenceScore, setupShopName, segment, fuzzySegmentScore);
+                foreach (var alias in setupShop.Aliases)
+                {
+                    var aliasScore = Fuzz.PartialRatio(alias.SanitizeSpecialChars(), sanitizedSegment);
+                    MatchScoreHelper.CheckScore(ref bestMatch, minConfidenceScore, alias, segment, aliasScore);
+                }
             }
         }
         
