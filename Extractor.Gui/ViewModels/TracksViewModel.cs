@@ -20,12 +20,13 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
         if (_isInitialized) return;
 
         IsLoading = true;
+        var tempDto = new TracksDataDto();
         try
         {
             await Task.Run(() =>
             {
                 var tracks = tracksRepository.ReadTracks();
-                mapper.Map(tracks, TracksDto);
+                mapper.Map(tracks, tempDto);
             });
         }
         catch (Exception e)
@@ -33,6 +34,7 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
         }
         finally
         {
+            TracksDto = tempDto;
             _isInitialized = true;
             IsLoading = false;
         }
@@ -64,12 +66,13 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
     private async Task Reload()
     {
         IsLoading = true;
+        var tempDto = new TracksDataDto();
         try
         {
             await Task.Run(() =>
             {
                 var tracks = tracksRepository.ReadTracks();
-                mapper.Map(tracks, TracksDto);
+                mapper.Map(tracks, tempDto);
             });
         }
         catch
@@ -77,6 +80,7 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
         }
         finally
         {
+            TracksDto = tempDto;
             IsLoading = false;
         }
     }

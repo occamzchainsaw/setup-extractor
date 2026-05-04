@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -5,36 +6,34 @@ using CommunityToolkit.Mvvm.Input;
 using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
-using Extractor.Gui.Services.Interfaces;
 
 namespace Extractor.Gui.ViewModels;
 
-public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settingsRepository, IFolderPicker folderPicker) : ViewModelBase
+public partial class SetupShopsViewModel(IMapper mapper, ISetupShopsRepository setupShopsRepository) : ViewModelBase
 {
     private bool _isInitialized;
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
-    [ObservableProperty] public partial CoreConfigDto ConfigDto { get; set; } = new();
+    [ObservableProperty] public partial SetupShopsDataDto ShopsDto { get; set; } = new();
 
     public async Task InitializeAsync()
     {
         if (_isInitialized) return;
 
         IsLoading = true;
-        var tempDto = new CoreConfigDto();
+        var tempDto = new SetupShopsDataDto();
         try
         {
             await Task.Run(() =>
             {
-                var config = settingsRepository.ReadSettings() ?? new CoreConfig();
-                mapper.Map(config, tempDto);
+                var shops = setupShopsRepository.ReadSetupShops();
+                mapper.Map(shops, tempDto);
             });
         }
-        catch
-        {
-        }
+        catch (Exception e)
+        {}
         finally
         {
-            ConfigDto = tempDto;
+            ShopsDto = tempDto;
             _isInitialized = true;
             IsLoading = false;
         }
@@ -48,14 +47,13 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
         {
             await Task.Run(() =>
             {
-                var config = new CoreConfig();
-                mapper.Map(ConfigDto, config);
-                settingsRepository.SaveSettings(config);
+                var shops = new SetupShopsData();
+                mapper.Map(ShopsDto, shops);
+                setupShopsRepository.SaveSetupShops(shops);
             });
         }
         catch
-        {
-        }
+        {}
         finally
         {
             IsLoading = false;
@@ -66,30 +64,21 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
     private async Task Reload()
     {
         IsLoading = true;
-        var tempDto = new CoreConfigDto();
+        var tempDto = new SetupShopsDataDto();
         try
         {
             await Task.Run(() =>
             {
-                var config = settingsRepository.ReadSettings() ?? new CoreConfig();
-                mapper.Map(config, tempDto);
+                var shops = setupShopsRepository.ReadSetupShops();
+                mapper.Map(shops, tempDto);
             });
         }
         catch
-        {
-        }
+        {}
         finally
         {
-            ConfigDto = tempDto;
+            ShopsDto = tempDto;
             IsLoading = false;
         }
-    }
-
-    [RelayCommand]
-    private async Task BrowseSetupsFolder()
-    {
-        var selectedPath = await folderPicker.PickFolderAsync("Select iRacing Setups Folder");
-        if (string.IsNullOrEmpty(selectedPath)) return;
-        ConfigDto.SetupsBasePath = selectedPath;
     }
 }

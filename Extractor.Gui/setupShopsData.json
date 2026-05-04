@@ -1,7 +1,16 @@
 {
-  "Names": [
-    "HYMO",
-    "CDA",
-    "Apex"
+  "Shops": [
+    {
+      "Cardinal": "HYMO",
+      "Aliases": []
+    },
+    {
+      "Cardinal": "CDA",
+      "Aliases": []
+    },
+    {
+      "Cardinal": "Apex",
+      "Aliases": []
+    }
   ]
 }

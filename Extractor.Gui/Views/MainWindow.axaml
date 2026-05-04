@@ -21,6 +21,9 @@
         <DataTemplate DataType="vm:TracksViewModel">
             <views:TracksView/>
         </DataTemplate>
+        <DataTemplate DataType="vm:SetupShopsViewModel">
+            <views:SetupShopsView/>
+        </DataTemplate>
     </Window.DataTemplates>
 
     <Design.DataContext>
@@ -44,6 +47,9 @@
             <Button Content="Tracks Editor"
                     HorizontalAlignment="Stretch"
                     Command="{Binding GoTracksCommand}"/>
+            <Button Content="Shops Editor"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding GoSetupShopsCommand}"/>
         </StackPanel>
         
         <ContentControl Grid.Column="1"

@@ -24,4 +24,7 @@ public partial class MainWindowViewModel : ViewModelBase
     
     [RelayCommand]
     private void GoTracks() => CurrentPage = _services.GetRequiredService<TracksViewModel>();
+
+    [RelayCommand]
+    private void GoSetupShops() => CurrentPage = _services.GetRequiredService<SetupShopsViewModel>();
 }

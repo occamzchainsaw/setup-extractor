@@ -5,8 +5,8 @@
              xmlns:vm="using:Extractor.Gui.ViewModels"
              xmlns:models="using:Extractor.Gui.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Extractor.Gui.Views.TracksView"
-             x:DataType="vm:TracksViewModel"
+             x:Class="Extractor.Gui.Views.SetupShopsView"
+             x:DataType="vm:SetupShopsViewModel"
              Loaded="OnLoaded">
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Bottom"
@@ -21,12 +21,13 @@
 
         <Grid DockPanel.Dock="Top"
               RowDefinitions="Auto,*">
-            <TextBlock Grid.Row="0" 
-                       Text="Set your preferred track names and aliases to match to"/>
+            <TextBlock Grid.Row="0"
+                       Margin="0,0,0,12"
+                       Text="Set your preferred setup shop names and aliases to match to"/>
             <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding TracksDto.Tracks}">
+                <ItemsControl ItemsSource="{Binding ShopsDto.Shops}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type models:TrackDenominationDto}">
+                        <DataTemplate DataType="{x:Type models:SetupShopDenominationDto}">
                             <Grid ColumnDefinitions="*,8,2*"
                                   RowDefinitions="Auto,Auto"
                                   Margin="0,2">

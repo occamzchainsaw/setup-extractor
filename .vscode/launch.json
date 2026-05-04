@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Extractor.Gui",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}\\Extractor.Gui\\bin\\Debug\\net10.0\\Extractor.Gui.dll",
+      "cwd": "${workspaceFolder}\\Extractor.Gui",
+      "stopAtEntry": false,
+      "justMyCode": true
+    }
+  ]
+}
