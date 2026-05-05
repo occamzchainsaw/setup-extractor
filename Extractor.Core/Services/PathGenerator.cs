@@ -25,7 +25,7 @@ public class PathGenerator(IOptionsMonitor<CoreConfig> configMonitor) : IPathGen
         return Path.Combine(configMonitor.CurrentValue.SetupsBasePath, GenerateRelativePath(ctx));
     }
 
-    public string UpdateTemplateFromEnums(IEnumerable<PathElement> elements)
+    public string GenerateTemplateStringFromEnums(IEnumerable<PathElement> elements)
     {
         var parts = elements
             .Select(e =>
@@ -41,5 +41,19 @@ public class PathGenerator(IOptionsMonitor<CoreConfig> configMonitor) : IPathGen
             .Where(s => !string.IsNullOrWhiteSpace(s));
 
         return Path.Combine([.. parts]);
+    }
+
+    public List<PathElement> DeconstructTemplateElementsFromSettings()
+    {
+        var template = configMonitor.CurrentValue.PathTemplate;
+        if (string.IsNullOrWhiteSpace(template))
+            return [];
+        
+        var rawElements = template.Split(Path.PathSeparator);
+        var allElements = Enum.GetValues<PathElement>();
+        return rawElements
+            .Select(rawElement => allElements
+                .First(e => Enum.GetName(e)!.Equals(rawElement, StringComparison.InvariantCultureIgnoreCase)))
+            .ToList();
     }
 }

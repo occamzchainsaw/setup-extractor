@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Extractor.Gui.ViewModels"
+             xmlns:models="using:Extractor.Gui.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Extractor.Gui.Controls.PathTemplateBuilderControl"
+             x:DataType="vm:PathTemplateBuilderViewModel">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
+        <TextBlock Grid.Row="0"
+                   Text="Available Elements"
+                   Margin="0,0,0,4"/>
+        <!-- source zone -->
+        <ItemsControl Grid.Row="1"
+                      ItemsSource="{Binding AvailableElements}"
+                      Margin="0,0,0,8">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:PathElementDto}">
+                    <Border Background="#336699"
+                            CornerRadius="4"
+                            Padding="2,1"
+                            Margin="0,0,4,0"
+                            PointerPressed="OnElementPressed"
+                            Cursor="Hand">
+                        <TextBlock Text="{Binding Value}"
+                                   Foreground="White"/>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <TextBlock Grid.Row="2"
+                   Text="Path Template"
+                   Margin="0,0,0,4"/>
+        <!-- target zone -->
+        <Border Grid.Row="3"
+                x:Name="DropZone"
+                Background="Transparent"
+                BorderBrush="White"
+                BorderThickness="2"
+                MinHeight="30"
+                DragDrop.AllowDrop="True"
+                DragDrop.DragOver="OnDropZoneDragOver"
+                DragDrop.Drop="OnDropZoneDrop">
+            <ItemsControl x:Name="TargetItemsControl" ItemsSource="{Binding SelectedElements}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:PathElementDto}">
+                        <Border Background="#336699"
+                                CornerRadius="4"
+                                Padding="2,1"
+                                Margin="0,0,4,0"
+                                PointerPressed="OnElementPressed"
+                                Cursor="Hand"
+                                DragDrop.AllowDrop="True"
+                                DragDrop.Drop="OnTargetItemDrop">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{Binding Value}"
+                                           Foreground="White"/>
+                                <Button Content="X"
+                                        Width="16" Height="16"
+                                        Padding="0"
+                                        Click="OnRemoveClick"
+                                        Background="Transparent"
+                                        Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Grid>
+</UserControl>

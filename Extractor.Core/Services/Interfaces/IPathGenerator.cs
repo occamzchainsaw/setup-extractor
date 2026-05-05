@@ -6,5 +6,6 @@ public interface IPathGenerator
 {
     string GenerateRelativePath(PathTemplateContext ctx);
     string GenerateFullPath(PathTemplateContext ctx);
-    string UpdateTemplateFromEnums(IEnumerable<PathElement> elements);
+    string GenerateTemplateStringFromEnums(IEnumerable<PathElement> elements);
+    List<PathElement> DeconstructTemplateElementsFromSettings();
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,9 +10,17 @@ using Extractor.Gui.Services.Interfaces;
 
 namespace Extractor.Gui.ViewModels;
 
-public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settingsRepository, IFolderPicker folderPicker) : ViewModelBase
+public partial class SettingsViewModel(
+    IMapper mapper,
+    ISettingsRepostory settingsRepository,
+    IFolderPicker folderPicker,
+    IPathGenerator pathGenerator)
+    : ViewModelBase
 {
     private bool _isInitialized;
+
+    public PathTemplateBuilderViewModel PathTemplateBuilder { get; } = new();
+
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
     [ObservableProperty] public partial CoreConfigDto ConfigDto { get; set; } = new();
 
@@ -21,12 +30,14 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
 
         IsLoading = true;
         var tempDto = new CoreConfigDto();
+        List<PathElement> existingTemplateElements = [];
         try
         {
             await Task.Run(() =>
             {
                 var config = settingsRepository.ReadSettings() ?? new CoreConfig();
                 mapper.Map(config, tempDto);
+                existingTemplateElements = pathGenerator.DeconstructTemplateElementsFromSettings();
             });
         }
         catch
@@ -35,6 +46,7 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
         finally
         {
             ConfigDto = tempDto;
+            PathTemplateBuilder.Initialize(existingTemplateElements);
             _isInitialized = true;
             IsLoading = false;
         }
@@ -49,6 +61,8 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
             await Task.Run(() =>
             {
                 var config = new CoreConfig();
+                ConfigDto.PathTemplate = 
+                    pathGenerator.GenerateTemplateStringFromEnums(PathTemplateBuilder.SelectedElementsValues);
                 mapper.Map(ConfigDto, config);
                 settingsRepository.SaveSettings(config);
             });
@@ -67,12 +81,14 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
     {
         IsLoading = true;
         var tempDto = new CoreConfigDto();
+        List<PathElement> existingTemplateElements = [];
         try
         {
             await Task.Run(() =>
             {
                 var config = settingsRepository.ReadSettings() ?? new CoreConfig();
                 mapper.Map(config, tempDto);
+                existingTemplateElements = pathGenerator.DeconstructTemplateElementsFromSettings();
             });
         }
         catch
@@ -81,6 +97,7 @@ public partial class SettingsViewModel(IMapper mapper, ISettingsRepostory settin
         finally
         {
             ConfigDto = tempDto;
+            PathTemplateBuilder.Initialize(existingTemplateElements);
             IsLoading = false;
         }
     }

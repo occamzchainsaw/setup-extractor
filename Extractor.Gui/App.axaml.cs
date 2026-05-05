@@ -59,6 +59,7 @@ public partial class App : Application
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<TracksViewModel>();
         services.AddTransient<SetupShopsViewModel>();
+        services.AddTransient<PathTemplateBuilderViewModel>();
 
         Services = services.BuildServiceProvider();
             
