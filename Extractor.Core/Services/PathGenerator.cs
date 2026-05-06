@@ -43,13 +43,13 @@ public class PathGenerator(IOptionsMonitor<CoreConfig> configMonitor) : IPathGen
         return Path.Combine([.. parts]);
     }
 
-    public List<PathElement> DeconstructTemplateElementsFromSettings()
+    public List<PathElement> DeconstructTemplateElementsFromSettings(string template)
     {
-        var template = configMonitor.CurrentValue.PathTemplate;
         if (string.IsNullOrWhiteSpace(template))
             return [];
         
-        var rawElements = template.Split(Path.PathSeparator);
+        var separator = Path.DirectorySeparatorChar;
+        var rawElements = template.Split(separator);
         var allElements = Enum.GetValues<PathElement>();
         return rawElements
             .Select(rawElement => allElements

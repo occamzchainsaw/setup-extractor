@@ -14,6 +14,7 @@ using Extractor.Gui.ViewModels;
 using Extractor.Gui.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace Extractor.Gui;
 
@@ -33,18 +34,28 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
+
+        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        var configPath = Path.Combine(baseDir, ConfigFilePath);
+        var tracksPath = Path.Combine(baseDir, TracksDataFilePath);
+        var setupShopsPath = Path.Combine(baseDir, SetupShopsDataFilePath);
         var builder = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile(ConfigFilePath, optional: false, reloadOnChange: true)
-            .AddJsonFile(TracksDataFilePath, optional: false, reloadOnChange: true)
-            .AddJsonFile(SetupShopsDataFilePath, optional: false, reloadOnChange: true);
+            .AddJsonFile(configPath, optional: false, reloadOnChange: true)
+            .AddJsonFile(tracksPath, optional: false, reloadOnChange: true)
+            .AddJsonFile(setupShopsPath, optional: false, reloadOnChange: true);
         Configuration = builder.Build();
+
+        services.AddSingleton(Configuration);
+        services.AddOptions<CoreConfig>().Bind(Configuration);
+        services.AddOptions<TracksData>().Bind(Configuration);
+        services.AddOptions<SetupShopsData>().Bind(Configuration);
         
         services.AddAutoMapper(typeof(App));
 
-        services.AddSingleton<ISettingsRepostory>(new SettingsJsonRepository(ConfigFilePath));
-        services.AddSingleton<ITracksRepository>(new TracksJsonRepository(TracksDataFilePath));
-        services.AddSingleton<ISetupShopsRepository>(new SetupShopsJsonRepository(SetupShopsDataFilePath));
+        services.AddSingleton<IWriter<CoreConfig>>(new SettingsJsonWriter(configPath));
+        services.AddSingleton<IWriter<TracksData>>(new TracksJsonWriter(tracksPath));
+        services.AddSingleton<IWriter<SetupShopsData>>(new SetupShopsJsonWriter(setupShopsPath));
         services.AddTransient<IArchiveHandler, ZipArchiveHandler>();
         services.AddTransient<IPathGenerator, PathGenerator>();
         services.AddTransient<IPathContextComposer, PathContextComposer>();

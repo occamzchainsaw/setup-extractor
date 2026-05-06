@@ -22,7 +22,9 @@ public partial class PathTemplateBuilderViewModel : ViewModelBase
             SelectedElements.Add(element.ToDto());
 
         var allElements = Enum.GetValues<PathElement>().Select(e => e.ToDto()).ToList();
-        foreach (var element in allElements.Where(element => !SelectedElements.Contains(element)))
+        var comparer = new PathElementDtoComparer();
+        
+        foreach (var element in allElements.Where(e => !SelectedElements.Contains(e, comparer)))
             AvailableElements.Add(element);
     }
 }

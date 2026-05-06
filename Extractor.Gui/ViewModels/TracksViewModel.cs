@@ -6,10 +6,15 @@ using CommunityToolkit.Mvvm.Input;
 using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
+using Microsoft.Extensions.Options;
 
 namespace Extractor.Gui.ViewModels;
 
-public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRepository) : ViewModelBase
+public partial class TracksViewModel(
+    IMapper mapper,
+    IOptionsMonitor<TracksData> tracksMonitor,
+    IWriter<TracksData> tracksWriter) 
+    : ViewModelBase
 {
     private bool _isInitialized;
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
@@ -25,7 +30,7 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
         {
             await Task.Run(() =>
             {
-                var tracks = tracksRepository.ReadTracks();
+                var tracks = tracksMonitor.CurrentValue;
                 mapper.Map(tracks, tempDto);
             });
         }
@@ -50,7 +55,7 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
             {
                 var tracks = new TracksData();
                 mapper.Map(TracksDto, tracks);
-                tracksRepository.SaveTracks(tracks);
+                tracksWriter.SaveData(tracks);
             });
         }
         catch
@@ -71,7 +76,7 @@ public partial class TracksViewModel(IMapper mapper, ITracksRepository tracksRep
         {
             await Task.Run(() =>
             {
-                var tracks = tracksRepository.ReadTracks();
+                var tracks = tracksMonitor.CurrentValue;
                 mapper.Map(tracks, tempDto);
             });
         }

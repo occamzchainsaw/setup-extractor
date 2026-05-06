@@ -7,12 +7,14 @@ using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
 using Extractor.Gui.Services.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Extractor.Gui.ViewModels;
 
 public partial class SettingsViewModel(
     IMapper mapper,
-    ISettingsRepostory settingsRepository,
+    IOptionsMonitor<CoreConfig> configMonitor,
+    IWriter<CoreConfig> configWriter,
     IFolderPicker folderPicker,
     IPathGenerator pathGenerator)
     : ViewModelBase
@@ -35,9 +37,10 @@ public partial class SettingsViewModel(
         {
             await Task.Run(() =>
             {
-                var config = settingsRepository.ReadSettings() ?? new CoreConfig();
+                var config = configMonitor.CurrentValue;
                 mapper.Map(config, tempDto);
-                existingTemplateElements = pathGenerator.DeconstructTemplateElementsFromSettings();
+                existingTemplateElements = 
+                    pathGenerator.DeconstructTemplateElementsFromSettings(config.PathTemplate);
             });
         }
         catch
@@ -64,7 +67,7 @@ public partial class SettingsViewModel(
                 ConfigDto.PathTemplate = 
                     pathGenerator.GenerateTemplateStringFromEnums(PathTemplateBuilder.SelectedElementsValues);
                 mapper.Map(ConfigDto, config);
-                settingsRepository.SaveSettings(config);
+                configWriter.SaveData(config);
             });
         }
         catch
@@ -86,9 +89,10 @@ public partial class SettingsViewModel(
         {
             await Task.Run(() =>
             {
-                var config = settingsRepository.ReadSettings() ?? new CoreConfig();
+                var config = configMonitor.CurrentValue;
                 mapper.Map(config, tempDto);
-                existingTemplateElements = pathGenerator.DeconstructTemplateElementsFromSettings();
+                existingTemplateElements = 
+                    pathGenerator.DeconstructTemplateElementsFromSettings(config.PathTemplate);
             });
         }
         catch

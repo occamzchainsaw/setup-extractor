@@ -6,10 +6,15 @@ using CommunityToolkit.Mvvm.Input;
 using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
+using Microsoft.Extensions.Options;
 
 namespace Extractor.Gui.ViewModels;
 
-public partial class SetupShopsViewModel(IMapper mapper, ISetupShopsRepository setupShopsRepository) : ViewModelBase
+public partial class SetupShopsViewModel(
+    IMapper mapper,
+    IOptionsMonitor<SetupShopsData> setupShopsMonitor,
+    IWriter<SetupShopsData> setupShopsWriter) 
+    : ViewModelBase
 {
     private bool _isInitialized;
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
@@ -25,7 +30,7 @@ public partial class SetupShopsViewModel(IMapper mapper, ISetupShopsRepository s
         {
             await Task.Run(() =>
             {
-                var shops = setupShopsRepository.ReadSetupShops();
+                var shops = setupShopsMonitor.CurrentValue;
                 mapper.Map(shops, tempDto);
             });
         }
@@ -49,7 +54,7 @@ public partial class SetupShopsViewModel(IMapper mapper, ISetupShopsRepository s
             {
                 var shops = new SetupShopsData();
                 mapper.Map(ShopsDto, shops);
-                setupShopsRepository.SaveSetupShops(shops);
+                setupShopsWriter.SaveData(shops);
             });
         }
         catch
@@ -69,7 +74,7 @@ public partial class SetupShopsViewModel(IMapper mapper, ISetupShopsRepository s
         {
             await Task.Run(() =>
             {
-                var shops = setupShopsRepository.ReadSetupShops();
+                var shops = setupShopsMonitor.CurrentValue;
                 mapper.Map(shops, tempDto);
             });
         }
