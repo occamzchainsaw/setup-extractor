@@ -14,6 +14,8 @@ using Extractor.Gui.ViewModels;
 using Extractor.Gui.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
+using Extractor.Gui.Mappings;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -47,12 +49,17 @@ public partial class App : Application
             .AddJsonFile(setupShopsPath, optional: false, reloadOnChange: true);
         Configuration = builder.Build();
 
+        services.AddLogging();
+
         services.AddSingleton(Configuration);
         services.AddOptions<CoreConfig>().Bind(Configuration);
         services.AddOptions<TracksData>().Bind(Configuration);
         services.AddOptions<SetupShopsData>().Bind(Configuration);
-        
-        services.AddAutoMapper(typeof(App));
+
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<ConfigProfile>();
+        });
 
         services.AddSingleton<IWriter<CoreConfig>>(new SettingsJsonWriter(configPath));
         services.AddSingleton<IWriter<TracksData>>(new TracksJsonWriter(tracksPath));
