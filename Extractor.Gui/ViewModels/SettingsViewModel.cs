@@ -8,6 +8,7 @@ using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
 using Extractor.Gui.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace Extractor.Gui.ViewModels;
 
@@ -16,7 +17,8 @@ public partial class SettingsViewModel(
     IOptionsMonitor<CoreConfig> configMonitor,
     IWriter<CoreConfig> configWriter,
     IFolderPicker folderPicker,
-    IPathGenerator pathGenerator)
+    IPathGenerator pathGenerator,
+    IExceptionHandler exceptionHandler)
     : ViewModelBase
 {
     private bool _isInitialized;
@@ -43,8 +45,9 @@ public partial class SettingsViewModel(
                     pathGenerator.DeconstructTemplateElementsFromSettings(config.PathTemplate);
             });
         }
-        catch
+        catch (Exception ex)
         {
+            await exceptionHandler.ShowAsync(ex, "Failed to load settings", "Could not load settings from coreConfig.json.");
         }
         finally
         {
@@ -70,8 +73,9 @@ public partial class SettingsViewModel(
                 configWriter.SaveData(config);
             });
         }
-        catch
+        catch (Exception ex)
         {
+            await exceptionHandler.ShowAsync(ex, "Failed to save settings", "Could not save settings to coreConfig.json.");
         }
         finally
         {
@@ -95,8 +99,9 @@ public partial class SettingsViewModel(
                     pathGenerator.DeconstructTemplateElementsFromSettings(config.PathTemplate);
             });
         }
-        catch
+        catch (Exception ex)
         {
+            await exceptionHandler.ShowAsync(ex, "Failed to reload settings", "Could not reload settings from coreConfig.json.");
         }
         finally
         {

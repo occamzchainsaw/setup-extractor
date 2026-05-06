@@ -15,6 +15,7 @@ using Extractor.Gui.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Extractor.Gui;
 
@@ -63,6 +64,7 @@ public partial class App : Application
         services.AddTransient<IComponentMatcher<TrackMatchResult>, TrackMatcher>();
         services.AddTransient<IComponentMatcher<SetupShopMatchResult>, SetupShopMatcher>();
 
+        services.AddSingleton<IExceptionHandler, ExceptionHandler>();
         services.AddTransient<IFolderPicker, FolderPicker>();
 
         services.AddTransient<MainWindowViewModel>();
@@ -73,7 +75,8 @@ public partial class App : Application
         services.AddTransient<PathTemplateBuilderViewModel>();
 
         Services = services.BuildServiceProvider();
-            
+        RegisterGlobalExceptionHandlers();
+             
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var mainWindowViewModel = Services.GetService<MainWindowViewModel>();
@@ -84,5 +87,28 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static void RegisterGlobalExceptionHandlers()
+    {
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is Exception exception)
+            {
+                _ = ShowUnhandledExceptionAsync(exception, "Unhandled application exception.");
+            }
+        };
+
+        TaskScheduler.UnobservedTaskException += (_, args) =>
+        {
+            args.SetObserved();
+            _ = ShowUnhandledExceptionAsync(args.Exception, "Unobserved task exception.");
+        };
+    }
+
+    private static Task ShowUnhandledExceptionAsync(Exception exception, string message)
+    {
+        var handler = Services.GetService<IExceptionHandler>();
+        return handler?.ShowAsync(exception, "Application Error", message) ?? Task.CompletedTask;
     }
 }

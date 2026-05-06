@@ -7,13 +7,15 @@ using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
 using Microsoft.Extensions.Options;
+using Extractor.Gui.Services.Interfaces;
 
 namespace Extractor.Gui.ViewModels;
 
 public partial class SetupShopsViewModel(
     IMapper mapper,
     IOptionsMonitor<SetupShopsData> setupShopsMonitor,
-    IWriter<SetupShopsData> setupShopsWriter) 
+    IWriter<SetupShopsData> setupShopsWriter,
+    IExceptionHandler exceptionHandler) 
     : ViewModelBase
 {
     private bool _isInitialized;
@@ -35,7 +37,9 @@ public partial class SetupShopsViewModel(
             });
         }
         catch (Exception e)
-        {}
+        {
+            await exceptionHandler.ShowAsync(e, "Failed to load setup shops", "Could not load setup shops from setupShopsData.json.");
+        }
         finally
         {
             ShopsDto = tempDto;
@@ -57,8 +61,10 @@ public partial class SetupShopsViewModel(
                 setupShopsWriter.SaveData(shops);
             });
         }
-        catch
-        {}
+        catch (Exception ex)
+        {
+            await exceptionHandler.ShowAsync(ex, "Failed to save setup shops", "Could not save setup shops to setupShopsData.json.");
+        }
         finally
         {
             IsLoading = false;
@@ -78,8 +84,10 @@ public partial class SetupShopsViewModel(
                 mapper.Map(shops, tempDto);
             });
         }
-        catch
-        {}
+        catch (Exception ex)
+        {
+            await exceptionHandler.ShowAsync(ex, "Failed to reload setup shops", "Could not reload setup shops from setupShopsData.json.");
+        }
         finally
         {
             ShopsDto = tempDto;

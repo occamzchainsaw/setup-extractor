@@ -7,13 +7,15 @@ using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
 using Microsoft.Extensions.Options;
+using Extractor.Gui.Services.Interfaces;
 
 namespace Extractor.Gui.ViewModels;
 
 public partial class TracksViewModel(
     IMapper mapper,
     IOptionsMonitor<TracksData> tracksMonitor,
-    IWriter<TracksData> tracksWriter) 
+    IWriter<TracksData> tracksWriter,
+    IExceptionHandler exceptionHandler) 
     : ViewModelBase
 {
     private bool _isInitialized;
@@ -36,6 +38,7 @@ public partial class TracksViewModel(
         }
         catch (Exception e)
         {
+            await exceptionHandler.ShowAsync(e, "Failed to load tracks", "Could not load tracks from tracksData.json.");
         }
         finally
         {
@@ -58,8 +61,9 @@ public partial class TracksViewModel(
                 tracksWriter.SaveData(tracks);
             });
         }
-        catch
+        catch (Exception ex)
         {
+            await exceptionHandler.ShowAsync(ex, "Failed to save tracks", "Could not save tracks to tracksData.json.");
         }
         finally
         {
@@ -80,8 +84,9 @@ public partial class TracksViewModel(
                 mapper.Map(tracks, tempDto);
             });
         }
-        catch
+        catch (Exception ex)
         {
+            await exceptionHandler.ShowAsync(ex, "Failed to reload tracks", "Could not reload tracks from tracksData.json.");
         }
         finally
         {
