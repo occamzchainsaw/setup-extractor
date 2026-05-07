@@ -8,8 +8,13 @@ using Extractor.Gui.Services.Interfaces;
 
 namespace Extractor.Gui.Services;
 
-public class FolderPicker : IFilePicker
+public class ZipFilePicker : IFilePicker
 {
+    private readonly FilePickerFileType _archiveType = new("zip archive")
+    {
+        Patterns = ["*.zip"]
+    };
+    
     public async Task<IEnumerable<string>> PickMultipleItemsAsync(string title)
     {
         if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
@@ -17,17 +22,17 @@ public class FolderPicker : IFilePicker
 
         var window = desktop.MainWindow;
         if (window is null) return [];
-
-        var result = await window.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions()
-            {
-                Title = title,
-                AllowMultiple = true
-            });
+        
+        var result = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        {
+            Title = title,
+            AllowMultiple = true,
+            FileTypeFilter = [_archiveType]
+        });
 
         if (result.Count == 0) return [];
 
-        List<IStorageFolder> selectedItems =
+        List<IStorageFile> selectedItems =
         [
             .. result
                 .Where(item => !string.IsNullOrWhiteSpace(item.TryGetLocalPath()))
@@ -43,13 +48,13 @@ public class FolderPicker : IFilePicker
         var window = desktop.MainWindow;
         if (window is null) return null;
         
-        var result = await window.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions()
-            {
-                Title = title,
-                AllowMultiple = false
-            });
-
+        var result = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+        {
+            Title = title,
+            AllowMultiple = false,
+            FileTypeFilter = [_archiveType]
+        });
+        
         return result.Count == 0 ? null : result[0].TryGetLocalPath();
     }
 }

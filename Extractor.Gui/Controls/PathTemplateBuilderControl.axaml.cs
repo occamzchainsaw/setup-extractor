@@ -98,8 +98,7 @@ public partial class PathTemplateBuilderControl : UserControl
     
     private void OnRemoveClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is not Button btn ||
-            btn.DataContext is not PathElementDto element ||
+        if (sender is not Button { DataContext: PathElementDto element } ||
             DataContext is not PathTemplateBuilderViewModel vm)
             return;
         

@@ -61,6 +61,7 @@ public partial class App : Application
             cfg.AddProfile<ConfigProfile>();
         });
 
+        // core services
         services.AddSingleton<IWriter<CoreConfig>>(new SettingsJsonWriter(configPath));
         services.AddSingleton<IWriter<TracksData>>(new TracksJsonWriter(tracksPath));
         services.AddSingleton<IWriter<SetupShopsData>>(new SetupShopsJsonWriter(setupShopsPath));
@@ -71,9 +72,12 @@ public partial class App : Application
         services.AddTransient<IComponentMatcher<TrackMatchResult>, TrackMatcher>();
         services.AddTransient<IComponentMatcher<SetupShopMatchResult>, SetupShopMatcher>();
 
+        // GUI services
         services.AddSingleton<IExceptionHandler, ExceptionHandler>();
-        services.AddTransient<IFolderPicker, FolderPicker>();
+        services.AddKeyedTransient<IFilePicker, FolderPicker>("folder");
+        services.AddKeyedTransient<IFilePicker, ZipFilePicker>("zip");
 
+        // ViewModels
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<HomeViewModel>();
         services.AddTransient<SettingsViewModel>();

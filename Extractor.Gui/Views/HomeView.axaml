@@ -3,8 +3,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Extractor.Gui.ViewModels"
+             xmlns:uc="using:Extractor.Gui.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Extractor.Gui.Views.HomeView"
              x:DataType="vm:HomeViewModel">
-    Home
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Vertical"
+                    Spacing="16">
+            <TextBlock Text="Home"/>
+            <Button HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    MinWidth="100"
+                    Content="Browse Setups Archive"
+                    Command="{Binding BrowseSetupsArchiveCommand}"/>
+        </StackPanel>
+    </DockPanel>
 </UserControl>

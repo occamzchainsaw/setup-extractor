@@ -9,6 +9,7 @@ using Extractor.Gui.Models;
 using Extractor.Gui.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Extractor.Gui.ViewModels;
 
@@ -16,7 +17,7 @@ public partial class SettingsViewModel(
     IMapper mapper,
     IOptionsMonitor<CoreConfig> configMonitor,
     IWriter<CoreConfig> configWriter,
-    IFolderPicker folderPicker,
+    [FromKeyedServices("folder")] IFilePicker folderPicker,
     IPathGenerator pathGenerator,
     IExceptionHandler exceptionHandler)
     : ViewModelBase
@@ -114,7 +115,7 @@ public partial class SettingsViewModel(
     [RelayCommand]
     private async Task BrowseSetupsFolder()
     {
-        var selectedPath = await folderPicker.PickFolderAsync("Select iRacing Setups Folder");
+        var selectedPath = await folderPicker.PickSingleItemAsync("Select iRacing Setups Folder");
         if (string.IsNullOrEmpty(selectedPath)) return;
         ConfigDto.SetupsBasePath = selectedPath;
     }
