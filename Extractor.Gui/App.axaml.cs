@@ -66,7 +66,7 @@ public partial class App : Application
         services.AddSingleton<IWriter<TracksData>>(new TracksJsonWriter(tracksPath));
         services.AddSingleton<IWriter<SetupShopsData>>(new SetupShopsJsonWriter(setupShopsPath));
         services.AddTransient<IArchiveHandler, ZipArchiveHandler>();
-        services.AddTransient<IPathGenerator, PathGenerator>();
+        services.AddTransient<IPathComposer, PathComposer>();
         services.AddTransient<IPathContextComposer, PathContextComposer>();
         services.AddTransient<IComponentMatcher<CarMatchResult>, CarMatcher>();
         services.AddTransient<IComponentMatcher<TrackMatchResult>, TrackMatcher>();
@@ -87,15 +87,15 @@ public partial class App : Application
 
         Services = services.BuildServiceProvider();
         RegisterGlobalExceptionHandlers();
-             
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+            return;
+        
+        var mainWindowViewModel = Services.GetService<MainWindowViewModel>();
+        desktop.MainWindow = new MainWindow
         {
-            var mainWindowViewModel = Services.GetService<MainWindowViewModel>();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = mainWindowViewModel
-            };
-        }
+            DataContext = mainWindowViewModel
+        };
 
         base.OnFrameworkInitializationCompleted();
     }

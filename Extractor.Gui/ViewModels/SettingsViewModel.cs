@@ -18,7 +18,7 @@ public partial class SettingsViewModel(
     IOptionsMonitor<CoreConfig> configMonitor,
     IWriter<CoreConfig> configWriter,
     [FromKeyedServices("folder")] IFilePicker folderPicker,
-    IPathGenerator pathGenerator,
+    IPathComposer pathComposer,
     IExceptionHandler exceptionHandler)
     : ViewModelBase
 {
@@ -43,7 +43,7 @@ public partial class SettingsViewModel(
                 var config = configMonitor.CurrentValue;
                 mapper.Map(config, tempDto);
                 existingTemplateElements = 
-                    pathGenerator.DeconstructTemplateElementsFromSettings(config.PathTemplate);
+                    pathComposer.DeconstructTemplateElementsFromSettings(config.PathTemplate);
             });
         }
         catch (Exception ex)
@@ -69,7 +69,7 @@ public partial class SettingsViewModel(
             {
                 var config = new CoreConfig();
                 ConfigDto.PathTemplate = 
-                    pathGenerator.GenerateTemplateStringFromEnums(PathTemplateBuilder.SelectedElementsValues);
+                    pathComposer.GenerateTemplateStringFromEnums(PathTemplateBuilder.SelectedElementsValues);
                 mapper.Map(ConfigDto, config);
                 configWriter.SaveData(config);
             });
@@ -97,7 +97,7 @@ public partial class SettingsViewModel(
                 var config = configMonitor.CurrentValue;
                 mapper.Map(config, tempDto);
                 existingTemplateElements = 
-                    pathGenerator.DeconstructTemplateElementsFromSettings(config.PathTemplate);
+                    pathComposer.DeconstructTemplateElementsFromSettings(config.PathTemplate);
             });
         }
         catch (Exception ex)

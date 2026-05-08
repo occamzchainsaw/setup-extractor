@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace Extractor.Core.Services;
 
-public class PathGenerator(IOptionsMonitor<CoreConfig> configMonitor) : IPathGenerator
+public class PathComposer(IOptionsMonitor<CoreConfig> configMonitor) : IPathComposer
 {
     public string GenerateRelativePath(PathTemplateContext ctx)
     {
@@ -12,17 +12,17 @@ public class PathGenerator(IOptionsMonitor<CoreConfig> configMonitor) : IPathGen
 
         return template
             .Replace($"{Enum.GetName(PathElement.Track)}", ctx.Track)
-            .Replace($"{Enum.GetName(PathElement.Season)}", ctx.Season)
             .Replace($"{Enum.GetName(PathElement.SeasonAndWeek)}", ctx.SeasonAndWeek)
+            .Replace($"{Enum.GetName(PathElement.Season)}", ctx.Season)
             .Replace($"{Enum.GetName(PathElement.SetupShop)}", ctx.SetupShop);
     }
 
-    public string GenerateFullPath(PathTemplateContext ctx)
+    public string GenerateFullPath(PathTemplateContext ctx, string fileName)
     {
         if (string.IsNullOrEmpty(configMonitor.CurrentValue.SetupsBasePath))
             return string.Empty;
 
-        return Path.Combine(configMonitor.CurrentValue.SetupsBasePath, GenerateRelativePath(ctx));
+        return Path.Combine(configMonitor.CurrentValue.SetupsBasePath, GenerateRelativePath(ctx), fileName);
     }
 
     public string GenerateTemplateStringFromEnums(IEnumerable<PathElement> elements)

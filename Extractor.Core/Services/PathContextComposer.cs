@@ -3,9 +3,11 @@ using Extractor.Core.Services.Interfaces;
 
 namespace Extractor.Core.Services;
 
-public class PathContextComposer(IComponentMatcher<CarMatchResult> carMatcher, 
+public class PathContextComposer(
+    IComponentMatcher<CarMatchResult> carMatcher, 
     IComponentMatcher<TrackMatchResult> trackMatcher,
-    IComponentMatcher<SetupShopMatchResult> setupShopMatcher) : IPathContextComposer
+    IComponentMatcher<SetupShopMatchResult> setupShopMatcher) 
+    : IPathContextComposer
 {
     public PathTemplateContext ComposePathTemplateContext(string archivePath, string season, string week)
     {
@@ -18,8 +20,8 @@ public class PathContextComposer(IComponentMatcher<CarMatchResult> carMatcher,
             Car = bestCarMatch.Success ? bestCarMatch.CardinalName : string.Empty,
             Track = bestTrackMatch.Success ? bestTrackMatch.CardinalName : string.Empty,
             SetupShop = bestSetupShopMatch.Success ? bestSetupShopMatch.CardinalName : string.Empty,
-            Season = $"S{season}",
-            SeasonAndWeek = $"S{season}W{week}",
+            Season = season,
+            SeasonAndWeek = $"{season}W{week}",
         };
     }
 }

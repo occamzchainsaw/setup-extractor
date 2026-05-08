@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Extractor.Gui.ViewModels"
              xmlns:uc="using:Extractor.Gui.Controls"
+             xmlns:models="using:Extractor.Gui.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Extractor.Gui.Views.HomeView"
              x:DataType="vm:HomeViewModel">
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Vertical"
-                    Spacing="16">
+                    Spacing="16"
+                    Margin="0,0,0,16">
             <TextBlock Text="Home"/>
             <Button HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -20,5 +22,54 @@
                     Content="Browse Setups Archive"
                     Command="{Binding BrowseSetupsArchiveCommand}"/>
         </StackPanel>
+        
+        <Grid DockPanel.Dock="Bottom"
+              RowDefinitions="Auto,*"
+              ColumnDefinitions="*,*"
+              RowSpacing="8"
+              ColumnSpacing="12">
+            <!-- loaded archives list -->
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       Text="Loaded Archives"/>
+            <Border Grid.Row="1" Grid.Column="0"
+                    Background="Transparent"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="6,8">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding LoadedArchives}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:ArchivePathDto}">
+                                <TextBlock Margin="0, 2" 
+                                           Text="{Binding DisplayPath}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+            <!-- extraction target paths -->
+            <Button Grid.Row="0" Grid.Column="1"
+                    Content="Produce Target Paths"
+                    Command="{Binding ProduceTargetPathsCommand}"/>
+            <Border Grid.Row="1" Grid.Column="1"
+                    Background="Transparent"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="6,8">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding TargetPaths}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type x:String}">
+                                <TextBlock Margin="0,2"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </DockPanel>
 </UserControl>
