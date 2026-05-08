@@ -8,12 +8,12 @@ namespace Extractor.Gui.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly IServiceProvider _services;
-    [ObservableProperty] private ObservableObject _currentPage;
+    [ObservableProperty] public partial ObservableObject CurrentPage { get; set; }
 
     public MainWindowViewModel(IServiceProvider services)
     {
         _services = services;
-        _currentPage = _services.GetRequiredService<HomeViewModel>();
+        CurrentPage = _services.GetRequiredService<HomeViewModel>();
     }
 
     [RelayCommand]

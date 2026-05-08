@@ -23,11 +23,7 @@ namespace Extractor.Gui;
 
 public partial class App : Application
 {
-    private const string ConfigFilePath = "coreConfig.json";
-    private const string TracksDataFilePath = "tracksData.json";
-    private const string SetupShopsDataFilePath = "setupShopsData.json";
-    public static IServiceProvider Services { get; private set; } = null!;
-    public static IConfiguration Configuration { get; private set; } = null!;
+    public static IServiceProvider Services { get; set; } = null!;
     
     public override void Initialize()
     {
@@ -36,56 +32,15 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var services = new ServiceCollection();
+        Services = new ServiceCollection()
+            .AddConfiguration()
+            .AddLogging()
+            .AddAutoMapper(cfg => { cfg.AddProfile<ConfigProfile>(); })
+            .RegisterCoreServices()
+            .RegisterGuiServices()
+            .RegisterViewModels()
+            .BuildServiceProvider();
 
-        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var configPath = Path.Combine(baseDir, ConfigFilePath);
-        var tracksPath = Path.Combine(baseDir, TracksDataFilePath);
-        var setupShopsPath = Path.Combine(baseDir, SetupShopsDataFilePath);
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile(configPath, optional: false, reloadOnChange: true)
-            .AddJsonFile(tracksPath, optional: false, reloadOnChange: true)
-            .AddJsonFile(setupShopsPath, optional: false, reloadOnChange: true);
-        Configuration = builder.Build();
-
-        services.AddLogging();
-
-        services.AddSingleton(Configuration);
-        services.AddOptions<CoreConfig>().Bind(Configuration);
-        services.AddOptions<TracksData>().Bind(Configuration);
-        services.AddOptions<SetupShopsData>().Bind(Configuration);
-
-        services.AddAutoMapper(cfg =>
-        {
-            cfg.AddProfile<ConfigProfile>();
-        });
-
-        // core services
-        services.AddSingleton<IWriter<CoreConfig>>(new SettingsJsonWriter(configPath));
-        services.AddSingleton<IWriter<TracksData>>(new TracksJsonWriter(tracksPath));
-        services.AddSingleton<IWriter<SetupShopsData>>(new SetupShopsJsonWriter(setupShopsPath));
-        services.AddTransient<IArchiveHandler, ZipArchiveHandler>();
-        services.AddTransient<IPathComposer, PathComposer>();
-        services.AddTransient<IPathContextComposer, PathContextComposer>();
-        services.AddTransient<IComponentMatcher<CarMatchResult>, CarMatcher>();
-        services.AddTransient<IComponentMatcher<TrackMatchResult>, TrackMatcher>();
-        services.AddTransient<IComponentMatcher<SetupShopMatchResult>, SetupShopMatcher>();
-
-        // GUI services
-        services.AddSingleton<IExceptionHandler, ExceptionHandler>();
-        services.AddKeyedTransient<IFilePicker, FolderPicker>("folder");
-        services.AddKeyedTransient<IFilePicker, ZipFilePicker>("zip");
-
-        // ViewModels
-        services.AddTransient<MainWindowViewModel>();
-        services.AddTransient<HomeViewModel>();
-        services.AddTransient<SettingsViewModel>();
-        services.AddTransient<TracksViewModel>();
-        services.AddTransient<SetupShopsViewModel>();
-        services.AddTransient<PathTemplateBuilderViewModel>();
-
-        Services = services.BuildServiceProvider();
         RegisterGlobalExceptionHandlers();
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
