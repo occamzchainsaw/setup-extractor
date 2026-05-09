@@ -6,15 +6,17 @@ namespace Extractor.Core.Services;
 
 public class PathComposer(IOptionsMonitor<CoreConfig> configMonitor) : IPathComposer
 {
-    public string GenerateRelativePath(PathTemplateContext ctx)
+    public string GenerateRelativePath(PathTemplateContext ctx, string fileName)
     {
         var template = configMonitor.CurrentValue.PathTemplate;
 
-        return template
-            .Replace($"{Enum.GetName(PathElement.Track)}", ctx.Track)
-            .Replace($"{Enum.GetName(PathElement.SeasonAndWeek)}", ctx.SeasonAndWeek)
-            .Replace($"{Enum.GetName(PathElement.Season)}", ctx.Season)
-            .Replace($"{Enum.GetName(PathElement.SetupShop)}", ctx.SetupShop);
+        return Path.Combine(
+            ctx.Car, 
+            template.Replace($"{Enum.GetName(PathElement.Track)}", ctx.Track)
+                .Replace($"{Enum.GetName(PathElement.SeasonAndWeek)}", ctx.SeasonAndWeek)
+                .Replace($"{Enum.GetName(PathElement.Season)}", ctx.Season)
+                .Replace($"{Enum.GetName(PathElement.SetupShop)}", ctx.SetupShop),
+            fileName);
     }
 
     public string GenerateFullPath(PathTemplateContext ctx, string fileName)
@@ -22,7 +24,7 @@ public class PathComposer(IOptionsMonitor<CoreConfig> configMonitor) : IPathComp
         if (string.IsNullOrEmpty(configMonitor.CurrentValue.SetupsBasePath))
             return string.Empty;
 
-        return Path.Combine(configMonitor.CurrentValue.SetupsBasePath, GenerateRelativePath(ctx), fileName);
+        return Path.Combine(configMonitor.CurrentValue.SetupsBasePath, GenerateRelativePath(ctx, fileName));
     }
 
     public string GenerateTemplateStringFromEnums(IEnumerable<PathElement> elements)

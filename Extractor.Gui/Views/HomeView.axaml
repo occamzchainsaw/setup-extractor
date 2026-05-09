@@ -3,73 +3,119 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Extractor.Gui.ViewModels"
-             xmlns:uc="using:Extractor.Gui.Controls"
+             xmlns:shadui="clr-namespace:ShadUI;assembly=ShadUI"
              xmlns:models="using:Extractor.Gui.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Extractor.Gui.Views.HomeView"
              x:DataType="vm:HomeViewModel">
-    <DockPanel LastChildFill="True">
-        <StackPanel DockPanel.Dock="Top"
-                    Orientation="Vertical"
-                    Spacing="16"
-                    Margin="0,0,0,16">
-            <TextBlock Text="Home"/>
-            <Button HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    MinWidth="100"
-                    Content="Browse Setups Archive"
-                    Command="{Binding BrowseSetupsArchiveCommand}"/>
-        </StackPanel>
-        
-        <Grid DockPanel.Dock="Bottom"
-              RowDefinitions="Auto,*"
-              ColumnDefinitions="*,*"
-              RowSpacing="8"
-              ColumnSpacing="12">
-            <!-- loaded archives list -->
-            <TextBlock Grid.Row="0" Grid.Column="0"
-                       Text="Loaded Archives"/>
-            <Border Grid.Row="1" Grid.Column="0"
-                    Background="Transparent"
-                    BorderBrush="White"
-                    BorderThickness="1"
-                    CornerRadius="6"
-                    Padding="6,8">
-                <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding LoadedArchives}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type models:ArchivePathDto}">
-                                <TextBlock Margin="0, 2" 
-                                           Text="{Binding DisplayPath}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
-            <!-- extraction target paths -->
-            <Button Grid.Row="0" Grid.Column="1"
-                    Content="Produce Target Paths"
-                    Command="{Binding ProduceTargetPathsCommand}"/>
-            <Border Grid.Row="1" Grid.Column="1"
-                    Background="Transparent"
-                    BorderBrush="White"
-                    BorderThickness="1"
-                    CornerRadius="6"
-                    Padding="6,8">
-                <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding TargetPaths}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type x:String}">
-                                <TextBlock Margin="0,2"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
-        </Grid>
-    </DockPanel>
+    <Panel>
+        <shadui:Card HasShadow="True"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     Margin="2">
+            <shadui:Card.Header>
+                <StackPanel>
+                    <shadui:CardTitle>Home</shadui:CardTitle>
+                    <shadui:CardDescription>Extract your setups your way</shadui:CardDescription>
+                </StackPanel>
+            </shadui:Card.Header>
+            <Panel>
+                <Grid RowDefinitions="Auto,Auto, *"
+                      RowSpacing="16">
+                    <Grid Grid.Row="0"
+                          ColumnDefinitions="*,*,*"
+                          ColumnSpacing="24">
+                        <NumericUpDown Grid.Column="0"
+                                       Value="{Binding Year}"
+                                       shadui:ControlAssist.Label="Year"/>
+                        <NumericUpDown Grid.Column="1"
+                                       Value="{Binding SeasonNumber}"
+                                       shadui:ControlAssist.Label="Season"
+                                       Minimum="1" Maximum="4"/>
+                        <NumericUpDown Grid.Column="2"
+                                       Value="{Binding WeekNumber}"
+                                       shadui:ControlAssist.Label="Week"
+                                       Minimum="1" Maximum="13"/>
+                    </Grid>
+                    <Button Grid.Row="1"
+                            Margin="0,0,0,16"
+                            Classes="Outline"
+                            HorizontalAlignment="Stretch"
+                            MinHeight="48"
+                            Content="Select Setups Archives"
+                            Command="{Binding BrowseSetupsArchiveCommand}"/>
+                    <Grid Grid.Row="2" 
+                          ColumnDefinitions="*,*"
+                          ColumnSpacing="16">
+                        <Grid Grid.Column="0"
+                              RowDefinitions="Auto, *">
+                            <TextBlock Grid.Row="0"
+                                       Margin="0,0,0,6"
+                                       Classes="Small"
+                                       Text="Loaded Archives"/>
+                            <Border Grid.Row="1"
+                                    CornerRadius="{DynamicResource LgCornerRadius}"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    Padding="8"
+                                    VerticalAlignment="Stretch">
+                                <ScrollViewer>
+                                    <ItemsControl ItemsSource="{Binding LoadedArchives}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type models:ArchivePathDto}">
+                                                <TextBlock Margin="0,4"
+                                                           TextWrapping="Wrap"
+                                                           Text="{Binding DisplayPath}"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                        <Grid Grid.Column="1"
+                              RowDefinitions="Auto, *">
+                            <TextBlock Grid.Row="0"
+                                       Margin="0,0,0,6"
+                                       Classes="Small"
+                                       Text="Target Paths"/>
+                            <Border Grid.Row="1"
+                                    CornerRadius="{DynamicResource LgCornerRadius}"
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    BorderThickness="1"
+                                    Padding="8">
+                                <ScrollViewer>
+                                    <TreeView ItemsSource="{Binding TargetTree}"
+                                              BorderThickness="0">
+                                        <TreeView.Styles>
+                                            <Style Selector="TreeViewItem">
+                                                <Setter Property="IsExpanded" Value="True"/>
+                                            </Style>
+                                        </TreeView.Styles>
+                                        <TreeView.ItemTemplate>
+                                            <TreeDataTemplate DataType="{x:Type models:TargetTreeNode}" 
+                                                              ItemsSource="{Binding Children}">
+                                                <TextBlock Margin="0,4"
+                                                           TextWrapping="Wrap"
+                                                           Text="{Binding Name}"/>
+                                            </TreeDataTemplate>
+                                        </TreeView.ItemTemplate>
+                                    </TreeView>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Panel>
+            <shadui:Card.Footer>
+                <DockPanel LastChildFill="False"
+                           HorizontalSpacing="16">
+                    <Button Classes="Primary"
+                            DockPanel.Dock="Right"
+                            Padding="12,0"
+                            Content="Extract"
+                            Command="{Binding ExtractCommand}"/>
+                </DockPanel>
+            </shadui:Card.Footer>
+        </shadui:Card>
+    </Panel>
 </UserControl>

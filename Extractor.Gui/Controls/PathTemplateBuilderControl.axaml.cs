@@ -33,7 +33,7 @@ public partial class PathTemplateBuilderControl : UserControl
         await DragDrop.DoDragDropAsync(e, dragData, DragDropEffects.Move);
     }
 
-    private void OnDropZoneDragOver(object? sender, DragEventArgs e)
+    private void OnDragOver(object? sender, DragEventArgs e)
     {
         e.DragEffects = e.DataTransfer.Formats.Contains(PathElementFormat) ? DragDropEffects.Move : DragDropEffects.None;
     }
