@@ -2,48 +2,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="clr-namespace:ShadUI;assembly=ShadUI"
              xmlns:vm="using:Extractor.Gui.ViewModels"
              xmlns:models="using:Extractor.Gui.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Extractor.Gui.Controls.PathTemplateBuilderControl"
              x:DataType="vm:PathTemplateBuilderViewModel">
-    <Grid RowDefinitions="Auto,Auto,Auto,*">
-        <TextBlock Grid.Row="0"
-                   Text="Available Elements"
-                   Margin="0,0,0,4"/>
-        <!-- source zone -->
-        <ItemsControl Grid.Row="1"
-                      ItemsSource="{Binding AvailableElements}"
-                      Margin="0,0,0,8">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:PathElementDto}">
-                    <Border Background="#336699"
-                            CornerRadius="4"
-                            Padding="2,1"
-                            Margin="0,0,4,0"
-                            PointerPressed="OnElementPressed"
-                            Cursor="Hand">
-                        <TextBlock Text="{Binding Value}"
-                                   Foreground="White"/>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <Grid RowDefinitions="Auto,Auto"
+          RowSpacing="6"
+          ColumnDefinitions="Auto,*"
+          ColumnSpacing="12">
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Classes="Small"
+                   Text="Available Elements"/>
+        <Border Grid.Row="0" Grid.Column="1" 
+                CornerRadius="{DynamicResource LgCornerRadius}"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="1"
+                Padding="8, 6">
+            <ItemsControl ItemsSource="{Binding AvailableElements}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:PathElementDto}">
+                        <Border Background="{DynamicResource SecondaryColor}"
+                                BorderBrush="{DynamicResource OutlineColor}"
+                                CornerRadius="{DynamicResource MdCornerRadius}"
+                                Padding="6,4"
+                                Margin="0,0,6,0"
+                                PointerPressed="OnElementPressed"
+                                Cursor="Hand">
+                            <TextBlock Text="{Binding Value}"
+                                       Foreground="{DynamicResource SecondaryForegroundColor}"
+                                       Classes="Caption"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
         
-        <TextBlock Grid.Row="2"
-                   Text="Path Template"
-                   Margin="0,0,0,4"/>
-        <!-- target zone -->
-        <Border Grid.Row="3"
+        <TextBlock Grid.Row="1" Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Classes="Small"
+                   Text="Path Template"/>
+        <Border Grid.Row="1" Grid.Column="1"
                 x:Name="DropZone"
-                Background="Transparent"
-                BorderBrush="White"
-                BorderThickness="2"
+                CornerRadius="{DynamicResource LgCornerRadius}"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="1"
+                Padding="8, 6"
                 MinHeight="30"
                 DragDrop.AllowDrop="True"
                 DragDrop.DragOver="OnDropZoneDragOver"
@@ -56,23 +67,24 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:PathElementDto}">
-                        <Border Background="#336699"
-                                CornerRadius="4"
-                                Padding="2,1"
-                                Margin="0,0,4,0"
+                        <Border Background="{DynamicResource SecondaryColor}"
+                                BorderBrush="{DynamicResource OutlineColor}"
+                                CornerRadius="{DynamicResource MdCornerRadius}"
+                                Padding="6,4"
+                                Margin="0,0,6,0"
                                 PointerPressed="OnElementPressed"
                                 Cursor="Hand"
                                 DragDrop.AllowDrop="True"
                                 DragDrop.Drop="OnTargetItemDrop">
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <TextBlock Text="{Binding Value}"
-                                           Foreground="White"/>
+                                           Foreground="{DynamicResource SecondaryForegroundColor}"
+                                           Classes="Caption"/>
                                 <Button Content="X"
                                         Width="16" Height="16"
                                         Padding="0"
                                         Click="OnRemoveClick"
-                                        Background="Transparent"
-                                        Foreground="White"/>
+                                        Classes="Ghost"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
