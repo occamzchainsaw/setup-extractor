@@ -16,9 +16,10 @@ public partial class SetupShopsViewModel(
     IOptionsMonitor<SetupShopsData> setupShopsMonitor,
     IWriter<SetupShopsData> setupShopsWriter,
     IExceptionHandler exceptionHandler) 
-    : ViewModelBase
+    : ViewModelBase, INavigable
 {
     private bool _isInitialized;
+    public static string Route => "setupShops";
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
     [ObservableProperty] public partial SetupShopsDataDto ShopsDto { get; set; } = new();
 
@@ -36,9 +37,9 @@ public partial class SetupShopsViewModel(
                 mapper.Map(shops, tempDto);
             });
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(e, "Failed to load setup shops", "Could not load setup shops from setupShopsData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to load setup shops");
         }
         finally
         {
@@ -63,7 +64,7 @@ public partial class SetupShopsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to save setup shops", "Could not save setup shops to setupShopsData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to save setup shops");
         }
         finally
         {
@@ -86,7 +87,7 @@ public partial class SetupShopsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to reload setup shops", "Could not reload setup shops from setupShopsData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to reload setup shops");
         }
         finally
         {

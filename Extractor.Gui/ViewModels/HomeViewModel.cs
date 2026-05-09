@@ -1,9 +1,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
 using Extractor.Gui.Services.Interfaces;
@@ -16,8 +14,9 @@ public partial class HomeViewModel(
     IArchiveHandler archiveHandler,
     IPathContextComposer pathContextComposer,
     IPathComposer pathComposer) 
-    : ViewModelBase
+    : ViewModelBase, INavigable
 {
+    public static string Route => "home";
     public ObservableCollection<ArchivePathDto> LoadedArchives { get; set; } = [];
     public ObservableCollection<string> TargetPaths { get; set; } = [];
     

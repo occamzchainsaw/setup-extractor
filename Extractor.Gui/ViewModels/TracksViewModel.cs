@@ -16,9 +16,10 @@ public partial class TracksViewModel(
     IOptionsMonitor<TracksData> tracksMonitor,
     IWriter<TracksData> tracksWriter,
     IExceptionHandler exceptionHandler) 
-    : ViewModelBase
+    : ViewModelBase, INavigable
 {
     private bool _isInitialized;
+    public static string Route => "tracks";
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
     [ObservableProperty] public partial TracksDataDto TracksDto { get; set; } = new();
 
@@ -36,9 +37,9 @@ public partial class TracksViewModel(
                 mapper.Map(tracks, tempDto);
             });
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(e, "Failed to load tracks", "Could not load tracks from tracksData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to load tracks");
         }
         finally
         {
@@ -63,7 +64,7 @@ public partial class TracksViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to save tracks", "Could not save tracks to tracksData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to save tracks");
         }
         finally
         {
@@ -86,7 +87,7 @@ public partial class TracksViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to reload tracks", "Could not reload tracks from tracksData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to reload tracks");
         }
         finally
         {
