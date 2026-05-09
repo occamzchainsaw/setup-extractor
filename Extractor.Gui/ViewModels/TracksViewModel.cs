@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Extractor.Core.Model;
@@ -21,7 +22,10 @@ public partial class TracksViewModel(
     private bool _isInitialized;
     public static string Route => "tracks";
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
-    [ObservableProperty] public partial TracksDataDto TracksDto { get; set; } = new();
+    [ObservableProperty] public partial bool IsSearching { get; set; } = false;
+    [ObservableProperty] public partial TracksDataDto TracksDto { get; private set; } = new();
+    [ObservableProperty] public partial DataGridCollectionView TracksView { get; private set; }
+    [ObservableProperty] public partial string SearchText { get; set; } = string.Empty;
 
     public async Task InitializeAsync()
     {
@@ -44,11 +48,13 @@ public partial class TracksViewModel(
         finally
         {
             TracksDto = tempDto;
+            TracksView = new DataGridCollectionView(TracksDto.Tracks) { Filter = FilterTracks };
+            SearchText = string.Empty;
             _isInitialized = true;
             IsLoading = false;
         }
     }
-    
+
     [RelayCommand]
     private async Task Save()
     {
@@ -92,7 +98,27 @@ public partial class TracksViewModel(
         finally
         {
             TracksDto = tempDto;
+            TracksView?.Refresh();
+            SearchText = string.Empty;
             IsLoading = false;
         }
+    }
+    
+    private bool FilterTracks(object item)
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+            return true;
+
+        if (item is not TrackDenominationDto track)
+            return false;
+
+        return track.Cardinal?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        IsSearching = true;
+        TracksView?.Refresh();
+        IsSearching = false;
     }
 }
