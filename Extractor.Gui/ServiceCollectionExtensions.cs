@@ -8,6 +8,7 @@ using Extractor.Gui.Services.Interfaces;
 using Extractor.Gui.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShadUI;
 
 namespace Extractor.Gui;
 
@@ -63,6 +64,8 @@ public static class ServiceCollectionExtensions
 
         public IServiceCollection RegisterGuiServices()
         {
+            services.AddSingleton<PageManager>();
+            services.AddSingleton<DialogManager>();
             services.AddSingleton<IExceptionHandler, ExceptionHandler>();
             services.AddKeyedTransient<IFilePicker, FolderPicker>("folder");
             services.AddKeyedTransient<IFilePicker, ZipFilePicker>("zip");

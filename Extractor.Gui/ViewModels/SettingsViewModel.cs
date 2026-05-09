@@ -20,10 +20,11 @@ public partial class SettingsViewModel(
     [FromKeyedServices("folder")] IFilePicker folderPicker,
     IPathComposer pathComposer,
     IExceptionHandler exceptionHandler)
-    : ViewModelBase
+    : ViewModelBase, INavigable
 {
     private bool _isInitialized;
 
+    public static string Route => "settings";
     public PathTemplateBuilderViewModel PathTemplateBuilder { get; } = new();
 
     [ObservableProperty] public partial bool IsLoading { get; set; } = false;
@@ -48,7 +49,7 @@ public partial class SettingsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to load settings", "Could not load settings from coreConfig.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to load settings");
         }
         finally
         {
@@ -76,7 +77,7 @@ public partial class SettingsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to save settings", "Could not save settings to coreConfig.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to save settings");
         }
         finally
         {
@@ -102,7 +103,7 @@ public partial class SettingsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to reload settings", "Could not reload settings from coreConfig.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to reload settings");
         }
         finally
         {

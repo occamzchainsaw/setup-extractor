@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Extractor.Core.Model;
@@ -16,11 +17,21 @@ public partial class TracksViewModel(
     IOptionsMonitor<TracksData> tracksMonitor,
     IWriter<TracksData> tracksWriter,
     IExceptionHandler exceptionHandler) 
-    : ViewModelBase
+    : ViewModelBase, INavigable
 {
     private bool _isInitialized;
-    [ObservableProperty] public partial bool IsLoading { get; set; } = false;
-    [ObservableProperty] public partial TracksDataDto TracksDto { get; set; } = new();
+    public static string Route => "tracks";
+    public bool IsBusy => IsSearching || IsLoading;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBusy))]
+    public partial bool IsLoading { get; set; } = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBusy))]
+    public partial bool IsSearching { get; set; } = false;
+
+    [ObservableProperty] public partial TracksDataDto TracksDto { get; private set; } = new();
+    [ObservableProperty] public partial DataGridCollectionView TracksView { get; private set; }
+    [ObservableProperty] public partial string SearchText { get; set; } = string.Empty;
 
     public async Task InitializeAsync()
     {
@@ -36,18 +47,20 @@ public partial class TracksViewModel(
                 mapper.Map(tracks, tempDto);
             });
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(e, "Failed to load tracks", "Could not load tracks from tracksData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to load tracks");
         }
         finally
         {
             TracksDto = tempDto;
+            TracksView = new DataGridCollectionView(TracksDto.Tracks) { Filter = FilterTracks };
+            SearchText = string.Empty;
             _isInitialized = true;
             IsLoading = false;
         }
     }
-    
+
     [RelayCommand]
     private async Task Save()
     {
@@ -63,7 +76,7 @@ public partial class TracksViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to save tracks", "Could not save tracks to tracksData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to save tracks");
         }
         finally
         {
@@ -86,12 +99,36 @@ public partial class TracksViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to reload tracks", "Could not reload tracks from tracksData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to reload tracks");
         }
         finally
         {
             TracksDto = tempDto;
+            TracksView?.Refresh();
+            SearchText = string.Empty;
             IsLoading = false;
         }
+    }
+    
+    private bool FilterTracks(object item)
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+            return true;
+
+        if (item is not TrackDenominationDto track)
+            return false;
+
+        return track.Cardinal?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        IsSearching = true;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            TracksView?.Refresh();
+            IsSearching = false;
+        });
     }
 }

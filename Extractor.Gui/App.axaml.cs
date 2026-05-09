@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Extractor.Gui;
 
-public partial class App : Application
+public class App : Application
 {
     public static IServiceProvider Services { get; set; } = null!;
     
@@ -61,20 +61,20 @@ public partial class App : Application
         {
             if (args.ExceptionObject is Exception exception)
             {
-                _ = ShowUnhandledExceptionAsync(exception, "Unhandled application exception.");
+                ShowUnhandledException(exception);
             }
         };
 
         TaskScheduler.UnobservedTaskException += (_, args) =>
         {
             args.SetObserved();
-            _ = ShowUnhandledExceptionAsync(args.Exception, "Unobserved task exception.");
+            ShowUnhandledException(args.Exception);
         };
     }
 
-    private static Task ShowUnhandledExceptionAsync(Exception exception, string message)
+    private static void ShowUnhandledException(Exception exception)
     {
         var handler = Services.GetService<IExceptionHandler>();
-        return handler?.ShowAsync(exception, "Application Error", message) ?? Task.CompletedTask;
+        handler?.ShowDialog(exception, "Application Error");
     }
 }

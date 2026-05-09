@@ -1,30 +1,30 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.Input;
+using Extractor.Gui.Services;
+using ShadUI;
 
 namespace Extractor.Gui.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly IServiceProvider _services;
-    [ObservableProperty] public partial ObservableObject CurrentPage { get; set; }
+    public PageManager PageManager { get; }
 
-    public MainWindowViewModel(IServiceProvider services)
+    public MainWindowViewModel(PageManager pageManager, DialogManager dialogManager)
     {
-        _services = services;
-        CurrentPage = _services.GetRequiredService<HomeViewModel>();
+        PageManager = pageManager;
+        DialogManager = dialogManager;
+        
+        PageManager.NavigateTo<HomeViewModel>();
     }
 
     [RelayCommand]
-    private void GoHome() => CurrentPage = _services.GetRequiredService<HomeViewModel>();
+    private void GoHome() => PageManager.NavigateTo<HomeViewModel>();
 
     [RelayCommand]
-    private void GoSettings() => CurrentPage = _services.GetRequiredService<SettingsViewModel>();
+    private void GoSettings() => PageManager.NavigateTo<SettingsViewModel>();
     
     [RelayCommand]
-    private void GoTracks() => CurrentPage = _services.GetRequiredService<TracksViewModel>();
+    private void GoTracks() => PageManager.NavigateTo<TracksViewModel>();
 
     [RelayCommand]
-    private void GoSetupShops() => CurrentPage = _services.GetRequiredService<SetupShopsViewModel>();
+    private void GoSetupShops() => PageManager.NavigateTo<SetupShopsViewModel>();
 }

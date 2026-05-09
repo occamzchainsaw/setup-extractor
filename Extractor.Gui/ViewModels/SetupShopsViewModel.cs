@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Extractor.Core.Model;
@@ -16,11 +17,20 @@ public partial class SetupShopsViewModel(
     IOptionsMonitor<SetupShopsData> setupShopsMonitor,
     IWriter<SetupShopsData> setupShopsWriter,
     IExceptionHandler exceptionHandler) 
-    : ViewModelBase
+    : ViewModelBase, INavigable
 {
     private bool _isInitialized;
-    [ObservableProperty] public partial bool IsLoading { get; set; } = false;
-    [ObservableProperty] public partial SetupShopsDataDto ShopsDto { get; set; } = new();
+    public static string Route => "setupShops";
+    public bool IsBusy => IsLoading || IsSearching;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBusy))]
+    public partial bool IsLoading { get; set; } = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBusy))]
+    public partial bool IsSearching { get; set; } = false;
+    [ObservableProperty] public partial SetupShopsDataDto ShopsDto { get; private set; } = new();
+    [ObservableProperty] public partial DataGridCollectionView ShopsView { get; private set; }
+    [ObservableProperty] public partial string SearchText { get; set; } = string.Empty;
 
     public async Task InitializeAsync()
     {
@@ -36,13 +46,15 @@ public partial class SetupShopsViewModel(
                 mapper.Map(shops, tempDto);
             });
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(e, "Failed to load setup shops", "Could not load setup shops from setupShopsData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to load setup shops");
         }
         finally
         {
             ShopsDto = tempDto;
+            ShopsView = new DataGridCollectionView(ShopsDto.Shops) { Filter = FilterShops };
+            SearchText = string.Empty;
             _isInitialized = true;
             IsLoading = false;
         }
@@ -63,7 +75,7 @@ public partial class SetupShopsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to save setup shops", "Could not save setup shops to setupShopsData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to save setup shops");
         }
         finally
         {
@@ -86,12 +98,36 @@ public partial class SetupShopsViewModel(
         }
         catch (Exception ex)
         {
-            await exceptionHandler.ShowAsync(ex, "Failed to reload setup shops", "Could not reload setup shops from setupShopsData.json.");
+            exceptionHandler.ShowDialog(ex, "Failed to reload setup shops");
         }
         finally
         {
             ShopsDto = tempDto;
+            ShopsView?.Refresh();
+            SearchText = string.Empty;
             IsLoading = false;
         }
+    }
+    
+    private bool FilterShops(object item)
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+            return true;
+
+        if (item is not SetupShopDenominationDto shop)
+            return false;
+
+        return shop.Cardinal?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        IsSearching = true;
+        
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            ShopsView?.Refresh();
+            IsSearching = false;
+        });
     }
 }
