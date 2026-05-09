@@ -21,8 +21,14 @@ public partial class TracksViewModel(
 {
     private bool _isInitialized;
     public static string Route => "tracks";
-    [ObservableProperty] public partial bool IsLoading { get; set; } = false;
-    [ObservableProperty] public partial bool IsSearching { get; set; } = false;
+    public bool IsBusy => IsSearching || IsLoading;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBusy))]
+    public partial bool IsLoading { get; set; } = false;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsBusy))]
+    public partial bool IsSearching { get; set; } = false;
+
     [ObservableProperty] public partial TracksDataDto TracksDto { get; private set; } = new();
     [ObservableProperty] public partial DataGridCollectionView TracksView { get; private set; }
     [ObservableProperty] public partial string SearchText { get; set; } = string.Empty;
@@ -118,7 +124,11 @@ public partial class TracksViewModel(
     partial void OnSearchTextChanged(string value)
     {
         IsSearching = true;
-        TracksView?.Refresh();
-        IsSearching = false;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            TracksView?.Refresh();
+            IsSearching = false;
+        });
     }
 }

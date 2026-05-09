@@ -24,26 +24,47 @@
                 </StackPanel>
             </shadui:Card.Header>
             <ScrollViewer>
-                <ItemsControl ItemsSource="{Binding ShopsDto.Shops}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type models:SetupShopDenominationDto}">
-                            <Grid ColumnDefinitions="*,2*"
-                                  ColumnSpacing="12"
-                                  Margin="0,2">
-                                <TextBox Grid.Column="0"
-                                         Text="{Binding Cardinal}"
-                                         shadui:ControlAssist.Label="Your name"/>
-                                <TextBox Grid.Column="1"
-                                         Text="{Binding AliasesJoined}"
-                                         shadui:ControlAssist.Label="Aliases (comma separated)"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <Panel>
+                    <ItemsControl ItemsSource="{Binding ShopsView}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:SetupShopDenominationDto}">
+                                <Grid ColumnDefinitions="*,2*"
+                                      ColumnSpacing="12"
+                                      Margin="0,2">
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding Cardinal}"
+                                             shadui:ControlAssist.Label="Your name"/>
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding AliasesJoined}"
+                                             shadui:ControlAssist.Label="Aliases (comma separated)"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <shadui:BusyArea CornerRadius="{DynamicResource LgCornerRadius}"
+                                     IsBusy="{Binding IsBusy}"/>
+                </Panel>
             </ScrollViewer>
             <shadui:Card.Footer>
                 <DockPanel LastChildFill="False"
                            HorizontalSpacing="16">
+                    <TextBox Classes="Clearable"
+                             DockPanel.Dock="Left"
+                             Text="{Binding SearchText}"
+                             PlaceholderText="Search shop..."
+                             Width="250"
+                             shadui:ControlAssist.ShowProgress="{Binding IsSearching}">
+                        <TextBox.InnerRightContent>
+                            <PathIcon Data="{x:Static shadui:Icons.Search}"
+                                      Opacity="0.75"
+                                      Width="16"/>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
                     <Button Classes="Primary"
                             DockPanel.Dock="Right"
                             Padding="12,0"

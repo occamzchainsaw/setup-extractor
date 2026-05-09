@@ -24,22 +24,31 @@
                 </StackPanel>
             </shadui:Card.Header>
             <ScrollViewer>
-                <ItemsControl ItemsSource="{Binding TracksView}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type models:TrackDenominationDto}">
-                            <Grid ColumnDefinitions="*,2*"
-                                  ColumnSpacing="12"
-                                  Margin="0,2">
-                                <TextBox Grid.Column="0"
-                                         Text="{Binding Cardinal}"
-                                         shadui:ControlAssist.Label="Your name"/>
-                                <TextBox Grid.Column="1"
-                                         Text="{Binding AliasesJoined}"
-                                         shadui:ControlAssist.Label="Aliases (comma separated)"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <Panel>
+                    <ItemsControl ItemsSource="{Binding TracksView}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:TrackDenominationDto}">
+                                <Grid ColumnDefinitions="*,2*"
+                                      ColumnSpacing="12"
+                                      Margin="0,2">
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding Cardinal}"
+                                             shadui:ControlAssist.Label="Your name"/>
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding AliasesJoined}"
+                                             shadui:ControlAssist.Label="Aliases (comma separated)"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <shadui:BusyArea CornerRadius="{DynamicResource LgCornerRadius}" 
+                                     IsBusy="{Binding IsBusy}" />
+                </Panel>
             </ScrollViewer>
             <shadui:Card.Footer>
                 <DockPanel LastChildFill="False"
