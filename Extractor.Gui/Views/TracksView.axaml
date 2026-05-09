@@ -17,7 +17,10 @@
             <shadui:Card.Header>
                 <StackPanel>
                     <shadui:CardTitle>Track Settings</shadui:CardTitle>
-                    <shadui:CardDescription>Set the name and aliases for each track. The name will be used in your setups paths, and the aliases help match the track to the setup file</shadui:CardDescription>
+                    <TextBlock Classes="Small"
+                               Foreground="{DynamicResource ForegroundLeadColor}"
+                               TextWrapping="Wrap"
+                               Text="Set the name and aliases for each track. The name will be used in your setups paths, and the aliases help match the track from the setup file"/>
                 </StackPanel>
             </shadui:Card.Header>
             <ScrollViewer>
