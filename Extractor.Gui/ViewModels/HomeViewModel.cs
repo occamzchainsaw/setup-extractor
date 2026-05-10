@@ -4,18 +4,23 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Extractor.Core.Model;
 using Extractor.Core.Services.Interfaces;
 using Extractor.Gui.Models;
 using Extractor.Gui.Services;
 using Extractor.Gui.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ShadUI;
 
 namespace Extractor.Gui.ViewModels;
 
 public partial class HomeViewModel(
+    IMapper mapper,
+    IOptionsMonitor<CoreConfig> configMonitor,
     [FromKeyedServices("zip")] IFilePicker zipFilePicker,
     TempDataJsonRepository tempDataRepository,
     IArchiveHandler archiveHandler,
@@ -32,6 +37,7 @@ public partial class HomeViewModel(
     [ObservableProperty] public partial int Year { get; set; } = DateTime.Now.Year;
     [ObservableProperty] public partial int SeasonNumber { get; set; } = 1;
     [ObservableProperty] public partial int WeekNumber { get; set; } = 1;
+    [ObservableProperty] public partial string CurrentBaseSetupsDirectory { get; set; } = string.Empty;
     private string SeasonString => $"{Year}S{SeasonNumber}";
     public ObservableCollection<ArchivePathDto> LoadedArchives { get; set; } = [];
     public ObservableCollection<TargetTreeNode> TargetTree { get; set; } = [];
@@ -43,11 +49,14 @@ public partial class HomeViewModel(
         if (_isInitilized) return;
 
         var tempDto = new UserInputDto();
+        var configDto = new CoreConfigDto();
         try
         {
             await Task.Run(() =>
             {
                 tempDto = tempDataRepository.ReadData<UserInputDto>(TempDataFileName);
+                var config = configMonitor.CurrentValue;
+                mapper.Map(config, configDto);
             });
         }
         catch (Exception ex)
@@ -62,6 +71,7 @@ public partial class HomeViewModel(
                 SeasonNumber = tempDto.SelectedSeason;
                 WeekNumber = tempDto.SelectedWeek;
             }
+            CurrentBaseSetupsDirectory = configDto.SetupsBasePath;
             _isInitilized = true;
         }
     }

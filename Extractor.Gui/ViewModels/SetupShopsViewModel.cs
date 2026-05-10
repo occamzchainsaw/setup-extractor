@@ -29,7 +29,7 @@ public partial class SetupShopsViewModel(
     [NotifyPropertyChangedFor(nameof(IsBusy))]
     public partial bool IsSearching { get; set; } = false;
     [ObservableProperty] public partial SetupShopsDataDto ShopsDto { get; private set; } = new();
-    [ObservableProperty] public partial DataGridCollectionView ShopsView { get; private set; }
+    [ObservableProperty] public required partial DataGridCollectionView ShopsView { get; set; }
     [ObservableProperty] public partial string SearchText { get; set; } = string.Empty;
 
     public async Task InitializeAsync()
@@ -52,11 +52,14 @@ public partial class SetupShopsViewModel(
         }
         finally
         {
-            ShopsDto = tempDto;
-            ShopsView = new DataGridCollectionView(ShopsDto.Shops) { Filter = FilterShops };
-            SearchText = string.Empty;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                ShopsDto = tempDto;
+                ShopsView = new DataGridCollectionView(ShopsDto.Shops) { Filter = FilterShops };
+                SearchText = string.Empty; 
+                IsLoading = false;
+            });
             _isInitialized = true;
-            IsLoading = false;
         }
     }
 
@@ -102,10 +105,13 @@ public partial class SetupShopsViewModel(
         }
         finally
         {
-            ShopsDto = tempDto;
-            ShopsView?.Refresh();
-            SearchText = string.Empty;
-            IsLoading = false;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                ShopsDto = tempDto;
+                ShopsView?.Refresh();
+                SearchText = string.Empty;
+                IsLoading = false;
+            });
         }
     }
     

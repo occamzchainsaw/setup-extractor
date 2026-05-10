@@ -111,6 +111,9 @@
             <shadui:Card.Footer>
                 <DockPanel LastChildFill="False"
                            HorizontalSpacing="16">
+                    <TextBlock Classes="Small"
+                               DockPanel.Dock="Left"
+                               Text="{Binding CurrentBaseSetupsDirectory, StringFormat='Setups base dir: {0}'}"/>
                     <Button Classes="Primary"
                             DockPanel.Dock="Right"
                             Padding="12,0"

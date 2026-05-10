@@ -13,6 +13,7 @@
         <shadui:Card HasShadow="True"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      Margin="2">
             <shadui:Card.Header>
                 <StackPanel>
@@ -23,33 +24,33 @@
                                Text="Set the name and aliases for each setup shop. The name will be used in your setups paths, and the aliases help match the setup shop from the setup file"/>
                 </StackPanel>
             </shadui:Card.Header>
-            <ScrollViewer>
-                <Panel>
-                    <ItemsControl ItemsSource="{Binding ShopsView}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type models:SetupShopDenominationDto}">
-                                <Grid ColumnDefinitions="*,2*"
-                                      ColumnSpacing="12"
-                                      Margin="0,2">
-                                    <TextBox Grid.Column="0"
-                                             Text="{Binding Cardinal}"
-                                             shadui:ControlAssist.Label="Your name"/>
-                                    <TextBox Grid.Column="1"
-                                             Text="{Binding AliasesJoined}"
-                                             shadui:ControlAssist.Label="Aliases (comma separated)"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <shadui:BusyArea CornerRadius="{DynamicResource LgCornerRadius}"
-                                     IsBusy="{Binding IsBusy}"/>
-                </Panel>
-            </ScrollViewer>
+            <Panel>
+                <DataGrid CanUserReorderColumns="False"
+                          CanUserSortColumns="False"
+                          GridLinesVisibility="Horizontal"
+                          ItemsSource="{Binding ShopsView}"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Your Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="models:SetupShopDenominationDto">
+                                    <TextBox Text="{Binding Cardinal}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Aliases (comma separated)"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="models:SetupShopDenominationDto">
+                                    <TextBox Text="{Binding AliasesJoined}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <shadui:BusyArea CornerRadius="{DynamicResource LgCornerRadius}"
+                                 IsBusy="{Binding IsBusy}"/>
+            </Panel>
             <shadui:Card.Footer>
                 <DockPanel LastChildFill="False"
                            HorizontalSpacing="16">

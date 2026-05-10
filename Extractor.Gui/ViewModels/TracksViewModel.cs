@@ -30,7 +30,7 @@ public partial class TracksViewModel(
     public partial bool IsSearching { get; set; } = false;
 
     [ObservableProperty] public partial TracksDataDto TracksDto { get; private set; } = new();
-    [ObservableProperty] public partial DataGridCollectionView TracksView { get; private set; }
+    [ObservableProperty] public required partial DataGridCollectionView TracksView { get; set; }
     [ObservableProperty] public partial string SearchText { get; set; } = string.Empty;
 
     public async Task InitializeAsync()
@@ -53,11 +53,14 @@ public partial class TracksViewModel(
         }
         finally
         {
-            TracksDto = tempDto;
-            TracksView = new DataGridCollectionView(TracksDto.Tracks) { Filter = FilterTracks };
-            SearchText = string.Empty;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                TracksDto = tempDto;
+                TracksView = new DataGridCollectionView(TracksDto.Tracks) { Filter = FilterTracks };
+                SearchText = string.Empty;
+                IsLoading = false;
+            });
             _isInitialized = true;
-            IsLoading = false;
         }
     }
 
@@ -103,10 +106,13 @@ public partial class TracksViewModel(
         }
         finally
         {
-            TracksDto = tempDto;
-            TracksView?.Refresh();
-            SearchText = string.Empty;
-            IsLoading = false;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                TracksDto = tempDto;
+                TracksView?.Refresh();
+                SearchText = string.Empty;
+                IsLoading = false; 
+            });
         }
     }
     
