@@ -1,7 +1,7 @@
 <Solution>
   <Project Path="Extractor.ApiClient/Extractor.ApiClient.csproj" />
-  <Project Path="Extractor.Core/Extractor.Core.csproj" />
-  <Project Path="Extractor.Gui/Extractor.Gui.csproj" />
+  <Project Path="public/Extractor.Core/Extractor.Core.csproj" />
+  <Project Path="public/Extractor.Gui/Extractor.Gui.csproj" />
   <Project Path="Extractor.HelperConsole/Extractor.HelperConsole.csproj" />
   <Project Path="Extractor.Tests/Extractor.Tests.csproj" />
 </Solution>

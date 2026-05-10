@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Extractor.Core\Extractor.Core.csproj" />
+      <ProjectReference Include="..\public\Extractor.Core\Extractor.Core.csproj" />
     </ItemGroup>
 
 </Project>
