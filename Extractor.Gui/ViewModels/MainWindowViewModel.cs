@@ -8,10 +8,14 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public PageManager PageManager { get; }
 
-    public MainWindowViewModel(PageManager pageManager, DialogManager dialogManager)
+    public MainWindowViewModel(
+        PageManager pageManager, 
+        DialogManager dialogManager,
+        ToastManager toastManager)
     {
         PageManager = pageManager;
         DialogManager = dialogManager;
+        ToastManager = toastManager;
         
         PageManager.NavigateTo<HomeViewModel>();
     }

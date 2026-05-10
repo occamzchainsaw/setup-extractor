@@ -78,5 +78,6 @@
                                          Margin="0,16,16,16" 
                                          Content="{Binding PageManager.CurrentPage}"/>
         </Grid>
+        <shadui:ToastHost Manager="{Binding ToastManager}"/>
     </Panel>
 </shadui:Window>

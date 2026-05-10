@@ -66,9 +66,11 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<PageManager>();
             services.AddSingleton<DialogManager>();
+            services.AddSingleton<ToastManager>();
             services.AddSingleton<IExceptionHandler, ExceptionHandler>();
             services.AddKeyedTransient<IFilePicker, FolderPicker>("folder");
             services.AddKeyedTransient<IFilePicker, ZipFilePicker>("zip");
+            services.AddTransient<TempDataJsonRepository>();
 
             return services;
         }

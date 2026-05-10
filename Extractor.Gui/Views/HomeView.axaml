@@ -7,7 +7,9 @@
              xmlns:models="using:Extractor.Gui.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Extractor.Gui.Views.HomeView"
-             x:DataType="vm:HomeViewModel">
+             x:DataType="vm:HomeViewModel"
+             Loaded="OnLoaded"
+             Unloaded="OnUnloaded">
     <Panel>
         <shadui:Card HasShadow="True"
                      HorizontalAlignment="Stretch"

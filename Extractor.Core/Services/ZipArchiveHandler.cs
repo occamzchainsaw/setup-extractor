@@ -17,4 +17,23 @@ public class ZipArchiveHandler : IArchiveHandler
                     StringComparison.OrdinalIgnoreCase))
             .Select(e => e.FullName)];
     }
+
+    public void ExtractFiles(string archivePath, IEnumerable<(string internalPath, string targetPath)> fileMapping)
+    {
+        using var archive = ZipFile.OpenRead(archivePath);
+
+        foreach (var (internalPath, targetPath) in fileMapping)
+        {
+            var entry = archive.GetEntry(internalPath);
+            if (entry == null) continue;
+
+            var directory = Path.GetDirectoryName(targetPath);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            entry.ExtractToFile(targetPath, overwrite: true);
+        }
+    }
 }
